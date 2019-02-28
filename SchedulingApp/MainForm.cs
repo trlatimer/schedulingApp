@@ -29,6 +29,11 @@ namespace SchedulingApp
            // dataGridView1.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
+        private void displayAppointments()
+        {
+            // TODO ADD APPOINTMENT FUNCTIONALITY
+        }
+
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit();

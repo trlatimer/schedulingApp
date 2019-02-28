@@ -27,6 +27,7 @@ namespace SchedulingApp
 
             // Check if test user has been created, if not, create user
             DataInterface.createTestUser();
+            DataInterface.createCustomer("John Doe", "0")
         }
 
         // Determine language for program

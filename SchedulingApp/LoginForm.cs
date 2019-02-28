@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using System.Globalization;
+using System.IO;
 
 namespace SchedulingApp
 {
@@ -26,6 +27,56 @@ namespace SchedulingApp
 
             // Check if test user has been created, if not, create user
             DataInterface.createTestUser();
+        }
+
+        // Determine language for program
+        private void determineLanguage()
+        {
+            // Obtain language used by user
+            currentCulture = CultureInfo.CurrentUICulture.Name;
+
+            // If french, translate appropriately
+            if (currentCulture == "fr-FR")
+            {
+                this.Text = "Calendrier App | S'identifier";
+                loginTitleLabel.Text = "Calendrier App";
+                loginSubTitleLabel.Text = "Veuillez vous connecter";
+                loginSubTitleLabel.Location = new Point(65, 66);
+                loginUsernameLabel.Text = "Nom d'utilisateur:";
+                loginPasswordLabel.Text = "Mot de passe";
+                loginLoginButton.Text = "S'identifier";
+                loginCreateUserButton.Text = "Créer un nouvel utilisateur";
+                loginExitButton.Text = "Sortie";
+                errorMessage = "Nom d'utilisateur et / ou mot de passe non trouvé.";
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        // Generate Log of Logins
+        private void recordLogin(string username)
+        { 
+            string path = "C:/SchedulingApp/Logs";
+            string fileName = "log.txt";
+            string fullPath = path + fileName;
+            string logEntry = $"{username} logged in at {DataInterface.getCurrentDateTime()}" + Environment.NewLine;
+            DirectoryInfo dir = new DirectoryInfo(path);
+            try
+            {
+                if (!dir.Exists)
+                {
+                    dir.Create();
+                }
+                File.AppendAllText(fullPath, logEntry);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("An error occurred when generating log. " + $"\n\n{e.Message}" + $"\n\n{e.StackTrace}");
+            }
+            
+            
         }
 
         private void loginLoginButton_Click(object sender, EventArgs e)
@@ -76,7 +127,10 @@ namespace SchedulingApp
                 MainForm mainForm = new MainForm();
                 MainForm.loginForm = this;
                 this.Hide();
-                mainForm.Show(); 
+                mainForm.Show();
+                loginUsernameTextBox.Text = "";
+                loginPasswordTextBox.Text = "";
+                recordLogin(DataInterface.getCurrentUserName());
             }
             // Username/Password do not match information in database
             else
@@ -84,32 +138,6 @@ namespace SchedulingApp
                 // Dipslay language appropriate error message
                 MessageBox.Show(errorMessage);
                 loginPasswordTextBox.Text = "";
-            }
-        }
-
-        // Determine language for program
-        private void determineLanguage()
-        {
-            // Obtain language used by user
-            currentCulture = CultureInfo.CurrentUICulture.Name;
-
-            // If french, translate appropriately
-            if (currentCulture == "fr-FR")
-            {
-                this.Text = "Calendrier App | S'identifier";
-                loginTitleLabel.Text = "Calendrier App";
-                loginSubTitleLabel.Text = "Veuillez vous connecter";
-                loginSubTitleLabel.Location = new Point(65, 66);
-                loginUsernameLabel.Text = "Nom d'utilisateur:";
-                loginPasswordLabel.Text = "Mot de passe";
-                loginLoginButton.Text = "S'identifier";
-                loginCreateUserButton.Text = "Créer un nouvel utilisateur";
-                loginExitButton.Text = "Sortie";
-                errorMessage = "Nom d'utilisateur et / ou mot de passe non trouvé.";
-            }
-            else
-            {
-                return;
             }
         }
 

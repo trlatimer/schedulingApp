@@ -24,10 +24,9 @@ namespace SchedulingApp
             InitializeComponent();
             // Obtain user culture and translate appropriately
             determineLanguage();
-
-            // Check if test user has been created, if not, create user
-            DataInterface.createTestUser();
-            DataInterface.createCustomer("John Doe", "0")
+            // Generate data into database --USE ONLY IF DATABASE HAS BEEN RESET--
+            DataInterface.generatePsuedoData();
+            
         }
 
         // Determine language for program

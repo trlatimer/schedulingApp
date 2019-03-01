@@ -14,6 +14,7 @@ namespace SchedulingApp
     public partial class MainForm : Form
     {
         public static LoginForm loginForm = null;
+        public static CustomerMainForm customerForm = null;
         
 
         public MainForm()
@@ -55,6 +56,14 @@ namespace SchedulingApp
             loginForm.Show();
             this.Hide();
 
+        }
+
+        private void mainCustomerButton_Click(object sender, EventArgs e)
+        {
+            CustomerMainForm customerForm = new CustomerMainForm();
+            CustomerMainForm.mainForm = this;
+            this.Hide();
+            customerForm.Show();
         }
     }
 }

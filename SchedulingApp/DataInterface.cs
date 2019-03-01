@@ -17,8 +17,10 @@ namespace SchedulingApp
         private static List<int> countryIDList = new List<int>();
         private static List<int> cityIDList = new List<int>();
         private static List<int> addressIDList = new List<int>();
-        private static string connectionString = "server=52.206.157.109;userid=U05Csd;database=U05Csd;password=53688462289";
-        private static MySqlConnection conn;
+        public static string connectionString = "server=52.206.157.109;userid=U05Csd;database=U05Csd;password=53688462289";
+        public static MySqlConnection conn = new MySqlConnection(connectionString);
+        public static MySqlCommand cmd;
+        public static MySqlDataReader reader;
 
         public static int getCurrentUserID()
         {
@@ -49,8 +51,8 @@ namespace SchedulingApp
         {
             int nextUserID = 0;
             DBOpen();
-            MySqlCommand cmd = new MySqlCommand("SELECT userId FROM user", conn);
-            MySqlDataReader reader = cmd.ExecuteReader();
+            cmd = new MySqlCommand("SELECT userId FROM user", conn);
+            reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 userIDList.Add(Convert.ToInt32(reader[0]));
@@ -74,14 +76,33 @@ namespace SchedulingApp
             return currentDateTime;
         }
 
+        public static void DBOpen()
+        {
+            if (conn.State != ConnectionState.Open)
+            {
+                conn = new MySqlConnection(connectionString);
+                conn.Open();
+            }
+            else
+            {
+                DBClose();
+                DBOpen();
+            }
+        }
+
+        public static void DBClose()
+        {
+            conn.Close();
+        }
+
         // Build Dictionary object for customer
         public static Dictionary<string, string> getCustomerInfo(int customerID)
         {
             // Retrieve details from customer table that match customerID
             string query = $"SELECT * FROM customer WHERE customerId = '{customerID.ToString()}'";
             DBOpen();
-            MySqlCommand cmd = new MySqlCommand(query, conn);
-            MySqlDataReader reader = cmd.ExecuteReader();
+            cmd = new MySqlCommand(query, conn);
+            reader = cmd.ExecuteReader();
             reader.Read();
 
             // Build customer dictionary object from customer table
@@ -139,7 +160,7 @@ namespace SchedulingApp
 
             // Establish and open database connection
             DBOpen();
-            MySqlCommand cmd = new MySqlCommand(sqlString, conn);
+            cmd = new MySqlCommand(sqlString, conn);
             cmd.ExecuteNonQuery();
             DBClose();
         }
@@ -147,31 +168,46 @@ namespace SchedulingApp
         // Create a new customer
         public static void createCustomer(string name, string address, string city, string country, string zipcode, string phoneNumber, int active, string creator, string secondAddress = " ")
         {
+            // TODO Refactor
+           
             int id = getNextID("customerId", "customer", customerIDList);
             int addressID;
             int cityID;
             int countryID;
-            string currentDateTime = getCurrentDateTime();
+            String currentDateTime = getCurrentDateTime();
+
+            if (conn.State == ConnectionState.Open)
+            {
+                DBClose();
+            }
 
             DBOpen();
+            
             // Check if country exists, if not, create a new one
             String query = $"SELECT countryId FROM country WHERE country = '{country}';";
-            MySqlCommand cmd = new MySqlCommand(query, conn);
-            MySqlDataReader reader = cmd.ExecuteReader();
+            cmd = new MySqlCommand(query, conn);
+            reader = cmd.ExecuteReader();
             reader.Read();
             if (reader.HasRows)
             {
                 countryID = Convert.ToInt32(reader[0]);
+                reader.Close();
             }
             else
             {
+                DBClose();
                 countryID = getNextID("countryId", "country", countryIDList);
-                query = $"INSERT INTO country (countryId, country, createDate, createdBy, lastUpdateBy) VALUES ('{countryID}', '{country}', '{currentDateTime}', '{creator}', '{creator}';";
-                cmd = new MySqlCommand(query, conn);
+                String sqlString = $"INSERT INTO country(countryId, country, createDate, createdBy, lastUpdateBy) VALUES ('{countryID}', '{country}', '{currentDateTime}', '{creator}', '{creator}');";
+
+                // Establish and open database connection
+                DBOpen();
+                cmd = new MySqlCommand(sqlString, conn);
                 cmd.ExecuteNonQuery();
             }
             reader.Close();
+            DBClose();
 
+            DBOpen();
             // Check if city exists, if not, create a new one
             query = $"SELECT cityId FROM city WHERE city = '{city}'";
             cmd = new MySqlCommand(query, conn);
@@ -184,7 +220,8 @@ namespace SchedulingApp
             else
             {
                 cityID = getNextID("cityId", "city", cityIDList);
-                query = $"INSERT INTO city (cityId, city, countryId, createDate, createdBy, lastUpdateBy) VALUES ('{cityID}', '{city}', '{countryID}', '{currentDateTime}', '{creator}', '{creator}';";
+                query = $"INSERT INTO city (cityId, city, countryId, createDate, createdBy, lastUpdateBy) VALUES ('{cityID}', '{city}', '{countryID}', '{currentDateTime}', '{creator}', '{creator}');";
+                DBOpen();
                 cmd = new MySqlCommand(query, conn);
                 cmd.ExecuteNonQuery();
             }
@@ -202,79 +239,29 @@ namespace SchedulingApp
             else
             {
                 addressID = getNextID("addressId", "address", addressIDList);
-                query = $"INSERT INTO address (addressId, address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdateBy) VALUES ('{addressID}', '{address}', '{secondAddress}', '{cityID}', '{zipcode}', '{phoneNumber}', '{currentDateTime}', '{creator}', '{creator}';";
+                query = $"INSERT INTO address (addressId, address, address2, cityId, postalCode, phone, createDate, createdBy, lastUpdateBy) VALUES ('{addressID}', '{address}', '{secondAddress}', '{cityID}', '{zipcode}', '{phoneNumber}', '{currentDateTime}', '{creator}', '{creator}');";
+                DBOpen();
                 cmd = new MySqlCommand(query, conn);
                 cmd.ExecuteNonQuery();
             }
             reader.Close();
 
             // Create new customer
-            query = $"INSERT INTO user(customerId, customerName, addressId, active, createDate, createBy, lastUpdatedBy) VALUES ('{id}', '{name}', '{addressID}', '{active}', '{currentDateTime}', '{creator}', '{creator}');";
+            query = $"INSERT INTO customer(customerId, customerName, addressId, active, createDate, createdBy, lastUpdateBy) VALUES ('{id}', '{name}', '{addressID}', '{active}', '{currentDateTime}', '{creator}', '{creator}');";
             cmd = new MySqlCommand(query, conn);
             cmd.ExecuteNonQuery();
             DBClose();
         }
 
-        public static void createCountry(string name, string creator)
-        {
-            int id = getNextID("countryId", "country", countryIDList);
-            string currentDateTime = getCurrentDateTime();
-            String sqlString = $"INSERT INTO country(countryId, country, createDate, createBy, lastUpdatedBy) VALUES ('{id}', '{name}', '{currentDateTime}', '{creator}', '{creator}');";
-
-            // Establish and open database connection
-            DBOpen();
-            MySqlCommand cmd = new MySqlCommand(sqlString, conn);
-            cmd.ExecuteNonQuery();
-            DBClose();
-        }
-
-        public static void createCity(string name, int countryID, string creator)
-        {
-            int id = getNextID("cityId", "city", cityIDList);
-            string currentDateTime = getCurrentDateTime();
-            bool matchFound = false;
-            String sqlString = $"INSERT INTO city(cityId, city, countryId, createDate, createBy, lastUpdatedBy) VALUES ('{id}', '{name}', '{countryID}', '{currentDateTime}', '{creator}', '{creator}');";
-
-            // Establish and open database connection
-            DBOpen();
-            MySqlCommand cmd = new MySqlCommand("SELECT countryId FROM country", conn);
-            MySqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                if (Convert.ToInt32(reader[0]) == countryID)
-                {
-                    matchFound = true;
-                }
-            }
-            if (matchFound == false)
-            {
-                createCountry()
-            }
-
-            
-            MySqlCommand cmd = new MySqlCommand(sqlString, conn);
-            cmd.ExecuteNonQuery();
-            DBClose();
-        }
-
-        public static void DBOpen()
-        {
-            conn = new MySqlConnection(connectionString);
-            conn.Open();
-        }
-
-        public static void DBClose()
-        {
-            conn.Close();
-        }
-
-        // Obtain next customer ID
+        // Obtain next ID
         public static int getNextID(string nameOfID, string table, List<int> list)
         {
             int nextID = 0;
             string query = $"SELECT {nameOfID} FROM {table}";
-            MySqlCommand cmd = new MySqlCommand(query, conn);
-            MySqlDataReader reader = cmd.ExecuteReader();
+            DBOpen();
+            cmd = new MySqlCommand(query, conn);
+            reader.Close();
+            reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 list.Add(Convert.ToInt32(reader[0]));
@@ -293,32 +280,21 @@ namespace SchedulingApp
             return nextID;
         }
 
-        public static void createCountry(int ID, string countryName, string creator)
-        {
-            int id = getNextID("countryId", "country", );
-            string currentDateTime = getCurrentDateTime();
-            String sqlString = $"INSERT INTO user(customerId, customerName, addressId, active, createDate, createBy, lastUpdatedBy) VALUES ('{id}', '{name}', '{addressID}', '{active}', '{currentDateTime}', '{creator}', '{creator}');";
-
-            // Establish and open database connection
-            DBOpen();
-            MySqlCommand cmd = new MySqlCommand(sqlString, conn);
-            cmd.ExecuteNonQuery();
-            DBClose();
-        }
-
         public static void generatePsuedoData()
         {
             DBOpen();
             // Create Test user
             string query = $"SELECT * FROM user WHERE userName = 'Test' OR userName = 'test'";
-            MySqlCommand cmd = new MySqlCommand(query, conn);
-            MySqlDataReader reader = cmd.ExecuteReader();
+            cmd = new MySqlCommand(query, conn);
+            reader = cmd.ExecuteReader();
 
             // check if 'Test' User already exists
             if (reader.HasRows)
             {
                 // if user exists, exit function
                 Console.WriteLine("User 'Test' already exists");
+                reader.Close();
+                DBClose();
                 return;
             }
             else
@@ -328,8 +304,11 @@ namespace SchedulingApp
             }
             reader.Close();
 
-            // Create 
-            string query = $"INSERT INTO "
+            // Create customers
+            createCustomer("John Doe", "1111 Some St", "New York, New York", "United States", "10001", "111-111-1111", 1, "ADMIN");
+            createCustomer("Jane Doe", "1112 Some St", "New York, New York", "United States", "10001", "111-111-1112", 1, "ADMIN");
+
+
             DBClose();
         }
 

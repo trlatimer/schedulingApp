@@ -177,5 +177,10 @@ namespace SchedulingApp
                 loginUsernameTextBox.BackColor = Color.White;
             }
         }
+
+        private void LoginForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

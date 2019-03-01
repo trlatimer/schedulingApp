@@ -58,7 +58,7 @@ namespace SchedulingApp
                 return;
             }
 
-            DataInterface.createUser(username, password, 1, creator, creator);
+            DataInterface.createUser(username, password, 1, creator);
             MessageBox.Show("Successfully created user. Please log in to continue.");
             this.Close();
             loginForm.Show();

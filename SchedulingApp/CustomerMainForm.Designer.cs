@@ -1,6 +1,6 @@
 ﻿namespace SchedulingApp
 {
-    partial class CustomerForm
+    partial class CustomerMainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -39,9 +39,13 @@
             // 
             // customersDGV
             // 
+            this.customersDGV.AllowUserToAddRows = false;
+            this.customersDGV.AllowUserToDeleteRows = false;
+            this.customersDGV.AllowUserToOrderColumns = true;
             this.customersDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.customersDGV.Location = new System.Drawing.Point(146, 53);
             this.customersDGV.Name = "customersDGV";
+            this.customersDGV.RowHeadersVisible = false;
             this.customersDGV.Size = new System.Drawing.Size(500, 202);
             this.customersDGV.TabIndex = 0;
             this.customersDGV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.customersDGV_CellContentClick);
@@ -64,6 +68,7 @@
             this.customerBackButton.TabIndex = 2;
             this.customerBackButton.Text = "Back";
             this.customerBackButton.UseVisualStyleBackColor = true;
+            this.customerBackButton.Click += new System.EventHandler(this.customerBackButton_Click);
             // 
             // customerAddButton
             // 
@@ -73,6 +78,7 @@
             this.customerAddButton.TabIndex = 3;
             this.customerAddButton.Text = "Add";
             this.customerAddButton.UseVisualStyleBackColor = true;
+            this.customerAddButton.Click += new System.EventHandler(this.customerAddButton_Click);
             // 
             // customerEditButton
             // 
@@ -92,7 +98,7 @@
             this.customerDeleteButton.Text = "Delete";
             this.customerDeleteButton.UseVisualStyleBackColor = true;
             // 
-            // CustomerForm
+            // CustomerMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -104,8 +110,9 @@
             this.Controls.Add(this.customerBackButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.customersDGV);
-            this.Name = "CustomerForm";
+            this.Name = "CustomerMainForm";
             this.Text = "Schedule App | Customers";
+            this.Activated += new System.EventHandler(this.CustomerMainForm_Activated);
             ((System.ComponentModel.ISupportInitialize)(this.customersDGV)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

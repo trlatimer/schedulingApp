@@ -15,6 +15,8 @@ namespace SchedulingApp
     {
         public static MainForm mainForm = null;
         public static AddCustomerForm addCustomer = null;
+        public static EditCustomerForm editCustomer = null;
+        public DataGridViewRow selectedRow;
 
         public CustomerMainForm()
         {
@@ -36,7 +38,8 @@ namespace SchedulingApp
 
         private void customersDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
+            int rowIndex = e.RowIndex;
+            selectedRow = customersDGV.Rows[rowIndex];
         }
 
         private void customerBackButton_Click(object sender, EventArgs e)
@@ -57,8 +60,17 @@ namespace SchedulingApp
 
         private void CustomerMainForm_Activated(object sender, EventArgs e)
         {
+            selectedCustomerID = 0;
             customersDGV.Refresh();
             displayCustomers();
+        }
+
+        private void customerEditButton_Click(object sender, EventArgs e)
+        {
+            DataInterface.DBClose();
+            editCustomer = new EditCustomerForm();
+            EditCustomerForm.customerForm = this;
+            editCustomer.Show();
         }
     }
 }

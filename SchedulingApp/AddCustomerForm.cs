@@ -21,32 +21,35 @@ namespace SchedulingApp
 
         private void customerSaveButton_Click(object sender, EventArgs e)
         {
-            validateInputs();
-            int ID = DataInterface.getNextID("customerId", "customer", DataInterface.getCustomerIDList());
-            string name = customerNameTextBox.Text;
-            string address = customerAddressTextBox.Text;
-            string address2 = customerAddress2TextBox.Text;
-            string city = customerCityTextBox.Text;
-            string zipCode = customerZipCodeTextBox.Text;
-            string country = customerCountryTextBox.Text;
-            string phone = customerPhoneTextBox.Text;
-            string currentUser = DataInterface.getCurrentUserName();
+            if (validateInputs())
+            {
+                int ID = DataInterface.getNextID("customerId", "customer", DataInterface.getCustomerIDList());
+                string name = customerNameTextBox.Text;
+                string address = customerAddressTextBox.Text;
+                string address2 = customerAddress2TextBox.Text;
+                string city = customerCityTextBox.Text;
+                string zipCode = customerZipCodeTextBox.Text;
+                string country = customerCountryTextBox.Text;
+                string phone = customerPhoneTextBox.Text;
+                string currentUser = DataInterface.getCurrentUserName();
 
-            DataInterface.createCustomer(name, address, city, country, zipCode, phone, 1, currentUser, address2);
-            CustomerMainForm.addCustomer = this;
-            customerForm.Show();
-            CustomerMainForm.addCustomer.Close();
+                DataInterface.createCustomer(name, address, city, country, zipCode, phone, 1, currentUser, address2);
+                CustomerMainForm.addCustomer = this;
+                customerForm.Show();
+                CustomerMainForm.addCustomer.Close();
+            }
         }
 
-        private void validateInputs()
+        private bool validateInputs()
         {
+            bool valid = true;
             foreach (Control control in Controls)
             {
                 if (control.Name != customerAddress2TextBox.Name && String.IsNullOrWhiteSpace(control.Text))
                 {
                     control.BackColor = Color.Salmon;
                     MessageBox.Show("All fields are required. Please try again.");
-                    return;
+                    valid = false;
                 }
             }
 
@@ -56,9 +59,10 @@ namespace SchedulingApp
             {
                 MessageBox.Show("Zip code must be a 5-digit number. Please try again.");
                 customerZipCodeTextBox.BackColor = Color.Salmon;
-                return;
+                valid = false;
             }
 
+            return valid;
         }
 
         private void checkTextChanged(Control control)

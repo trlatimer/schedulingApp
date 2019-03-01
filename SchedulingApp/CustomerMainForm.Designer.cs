@@ -42,10 +42,13 @@
             this.customersDGV.AllowUserToAddRows = false;
             this.customersDGV.AllowUserToDeleteRows = false;
             this.customersDGV.AllowUserToOrderColumns = true;
+            this.customersDGV.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.customersDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.customersDGV.Location = new System.Drawing.Point(146, 53);
+            this.customersDGV.MultiSelect = false;
             this.customersDGV.Name = "customersDGV";
             this.customersDGV.RowHeadersVisible = false;
+            this.customersDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.customersDGV.Size = new System.Drawing.Size(500, 202);
             this.customersDGV.TabIndex = 0;
             this.customersDGV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.customersDGV_CellContentClick);
@@ -88,6 +91,7 @@
             this.customerEditButton.TabIndex = 4;
             this.customerEditButton.Text = "Edit";
             this.customerEditButton.UseVisualStyleBackColor = true;
+            this.customerEditButton.Click += new System.EventHandler(this.customerEditButton_Click);
             // 
             // customerDeleteButton
             // 

@@ -122,6 +122,7 @@ namespace SchedulingApp
             // Add customer data from adddress table
             string cityID = reader[3].ToString();
             Customer.Add("Address", reader[1].ToString());
+            Customer.Add("Address2", reader[2].ToString());
             Customer.Add("ZipCode", reader[4].ToString());
             Customer.Add("Phone", reader[5].ToString());
             reader.Close();

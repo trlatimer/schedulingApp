@@ -16,7 +16,9 @@ namespace SchedulingApp
         public static MainForm mainForm = null;
         public static AddCustomerForm addCustomer = null;
         public static EditCustomerForm editCustomer = null;
-        public DataGridViewRow selectedRow;
+        public static int rowIndex = -1;
+        public static DataGridViewRow selectedRow;
+        public static int selectedCustomerID;
 
         public CustomerMainForm()
         {
@@ -38,8 +40,10 @@ namespace SchedulingApp
 
         private void customersDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            int rowIndex = e.RowIndex;
+            int rowIndex = customersDGV.CurrentCell.RowIndex;
             selectedRow = customersDGV.Rows[rowIndex];
+            selectedCustomerID = Convert.ToInt32(selectedRow.Cells[0].Value);
+            Console.WriteLine("Customer ID: " + selectedCustomerID);
         }
 
         private void customerBackButton_Click(object sender, EventArgs e)
@@ -60,7 +64,6 @@ namespace SchedulingApp
 
         private void CustomerMainForm_Activated(object sender, EventArgs e)
         {
-            selectedCustomerID = 0;
             customersDGV.Refresh();
             displayCustomers();
         }
@@ -71,6 +74,28 @@ namespace SchedulingApp
             editCustomer = new EditCustomerForm();
             EditCustomerForm.customerForm = this;
             editCustomer.Show();
+        }
+
+        private void customersDGV_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            rowIndex = customersDGV.CurrentCell.RowIndex;
+            selectedRow = customersDGV.Rows[rowIndex];
+            selectedCustomerID = Convert.ToInt32(selectedRow.Cells[0].Value);
+            Console.WriteLine("Customer ID: " + selectedCustomerID);
+        }
+
+        private void customerDeleteButton_Click(object sender, EventArgs e)
+        {
+            if (selectedCustomerID != -1)
+            {
+                DataInterface.deleteCustomer(selectedCustomerID);
+            }
+            else
+            {
+                MessageBox.Show("Please select a customer to delete and try again.");
+            }
+            customersDGV.Refresh();
+            displayCustomers();
         }
     }
 }

@@ -72,7 +72,7 @@ namespace SchedulingApp
 
         public static string getCurrentDateTime()
         {
-            string currentDateTime = DateTime.Now.ToString("u");
+            string currentDateTime = DateTime.UtcNow.ToString("u");
             return currentDateTime;
         }
 
@@ -98,19 +98,27 @@ namespace SchedulingApp
         // Build Dictionary object for customer
         public static Dictionary<string, string> getCustomerInfo(int customerID)
         {
+            Dictionary<string, string> Customer = new Dictionary<string, string>();
+            string addressID;
+
             // Retrieve details from customer table that match customerID
             string query = $"SELECT * FROM customer WHERE customerId = '{customerID.ToString()}'";
             DBOpen();
             cmd = new MySqlCommand(query, conn);
             reader = cmd.ExecuteReader();
             reader.Read();
-
-            // Build customer dictionary object from customer table
-            Dictionary<string, string> Customer = new Dictionary<string, string>();
-            string addressID = reader[2].ToString();
-            Customer.Add("ID", reader[0].ToString());
-            Customer.Add("Name", reader[1].ToString());
-            Customer.Add("Active", reader[3].ToString());
+            if (reader.HasRows)
+            {
+                // Build customer dictionary object from customer table
+                addressID = reader[2].ToString();
+                Customer.Add("ID", reader[0].ToString());
+                Customer.Add("Name", reader[1].ToString());
+                Customer.Add("Active", reader[3].ToString());
+            }
+            else
+            {
+                throw new Exception("Unable to obtain customer inforamtion");
+            }
             reader.Close();
 
             // Obtain information from address table by address ID corresponding to customer
@@ -249,6 +257,90 @@ namespace SchedulingApp
 
             // Create new customer
             query = $"INSERT INTO customer(customerId, customerName, addressId, active, createDate, createdBy, lastUpdateBy) VALUES ('{id}', '{name}', '{addressID}', '{active}', '{currentDateTime}', '{creator}', '{creator}');";
+            cmd = new MySqlCommand(query, conn);
+            cmd.ExecuteNonQuery();
+            DBClose();
+        }
+
+        public static void updateCustomer(int ID, string name, string address, string city, string country, string zipcode, string phoneNumber, int active, string secondAddress = " ")
+        {
+            // TODO Refactor
+            // TODO Create general query function
+            // TODO check if TextBox changed
+            // TODO active active checkbox
+
+            int addressID = -1;
+            int cityID = -1;
+            int countryID = -1;
+            String currentDateTime = getCurrentDateTime();
+
+            if (conn.State == ConnectionState.Open)
+            {
+                DBClose();
+            }
+
+            DBOpen();
+
+            // Get ID's
+            String query = $"SELECT addressId FROM customer WHERE customerId = '{ID}'";
+            cmd = new MySqlCommand(query, conn);
+            reader = cmd.ExecuteReader();
+            reader.Read();
+            if (reader.HasRows)
+            {
+                addressID = Convert.ToInt32(reader[0]);
+            }
+            reader.Close();
+
+            query = $"SELECT cityId FROM address WHERE addressId = '{addressID}'";
+            cmd = new MySqlCommand(query, conn);
+            reader = cmd.ExecuteReader();
+            reader.Read();
+            if (reader.HasRows)
+            {
+                cityID = Convert.ToInt32(reader[0]);
+            }
+            reader.Close();
+
+            query = $"SELECT countryId FROM city WHERE cityId = '{cityID}'";
+            cmd = new MySqlCommand(query, conn);
+            reader = cmd.ExecuteReader();
+            reader.Read();
+            if (reader.HasRows)
+            {
+                countryID = Convert.ToInt32(reader[0]);
+            }
+            reader.Close();
+
+            if (addressID == -1 || cityID == -1 || countryID == -1)
+            {
+                throw new Exception("Unable to obtain ID's for associated customer data. Please try again.");
+            }
+
+            // Check update each table associated with customer
+            query = $"UPDATE customer SET customerName = '{name}', lastUpdateBy = '{currentUserName}' WHERE customerId = '{ID}'";
+            cmd = new MySqlCommand(query, conn);
+            cmd.ExecuteNonQuery();
+
+            query = $"UPDATE address SET address = '{address}', address2 = '{secondAddress}', postalCode = '{zipcode}', phone = '{phoneNumber}', lastUpdateBy = '{currentUserName}' WHERE addressId = '{addressID}'";
+            cmd = new MySqlCommand(query, conn);
+            cmd.ExecuteNonQuery();
+
+            query = $"UPDATE city SET city = '{city}', lastUpdateBy = '{currentUserName}' WHERE cityId = '{cityID}'";
+            cmd = new MySqlCommand(query, conn);
+            cmd.ExecuteNonQuery();
+
+            query = $"UPDATE country SET country = '{country}', lastUpdateBy = '{currentUserName}'";
+            cmd = new MySqlCommand(query, conn);
+            cmd.ExecuteNonQuery();
+
+            DBClose();
+        }
+
+        public static void deleteCustomer(int customerID)
+        {
+            DBOpen();
+            String query = $"DELETE FROM customer WHERE customerId = '{customerID}'";
             cmd = new MySqlCommand(query, conn);
             cmd.ExecuteNonQuery();
             DBClose();

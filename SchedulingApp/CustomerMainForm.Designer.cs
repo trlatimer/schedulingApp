@@ -51,6 +51,7 @@
             this.customersDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.customersDGV.Size = new System.Drawing.Size(500, 202);
             this.customersDGV.TabIndex = 0;
+            this.customersDGV.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.customersDGV_CellClick);
             this.customersDGV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.customersDGV_CellContentClick);
             // 
             // label1
@@ -101,6 +102,7 @@
             this.customerDeleteButton.TabIndex = 5;
             this.customerDeleteButton.Text = "Delete";
             this.customerDeleteButton.UseVisualStyleBackColor = true;
+            this.customerDeleteButton.Click += new System.EventHandler(this.customerDeleteButton_Click);
             // 
             // CustomerMainForm
             // 

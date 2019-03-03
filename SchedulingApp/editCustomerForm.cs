@@ -12,36 +12,56 @@ namespace SchedulingApp
 {
     public partial class EditCustomerForm : SchedulingAppBaseForms.CustomerForm
     {
-        public static CustomerMainForm customerForm = null;
-        private int selectedCustomerID;
-        private string selectedCustomerName;
-        private string selectedCustomerAddress;
-        private string selectedCustomerAddress2;
-        private string selectedCustomerCity;
-        private string selectedCustomerZip;
-        private string selectedCustomerCountry;
-        private string selectedCustomerPhone;
+        public static CustomerMainForm customerForm;
         private Dictionary<string, string> selectedCustomer;
 
         public EditCustomerForm()
         {
             InitializeComponent();
-
-
+            setTextBoxText();
         }
 
         private void setTextBoxText()
         {
-            selectedCustomerID = Convert.ToInt32(customerForm.selectedRow.Cells[0].Value);
-            selectedCustomer = DataInterface.getCustomerInfo(selectedCustomerID);
+            
+            selectedCustomer = DataInterface.getCustomerInfo(CustomerMainForm.selectedCustomerID);
 
-            selectedCustomer.TryGetValue("Name", out selectedCustomerName);
-            selectedCustomer.TryGetValue("Address", out selectedCustomerAddress);
-            selectedCustomer.TryGetValue("Address2", out selectedCustomerAddress2);
-            selectedCustomer.TryGetValue("ZipCode", out selectedCustomerZip);
-            selectedCustomer.TryGetValue("Phone", out selectedCustomerPhone);
-            selectedCustomer.TryGetValue("City", out selectedCustomerCity);
-            selectedCustomer.TryGetValue("Country", out selectedCustomerCountry);
+            customerIDTextBox.Text = selectedCustomer["ID"];
+            customerNameTextBox.Text = selectedCustomer["Name"];
+            customerAddressTextBox.Text = selectedCustomer["Address"];
+            customerAddress2TextBox.Text = selectedCustomer["Address2"];
+            customerZipCodeTextBox.Text = selectedCustomer["ZipCode"];
+            customerPhoneTextBox.Text = selectedCustomer["Phone"];
+            customerCityTextBox.Text = selectedCustomer["City"];
+            customerCountryTextBox.Text = selectedCustomer["Country"];
+        }
+
+        private void customerCancelButton_Click(object sender, EventArgs e)
+        {
+            DataInterface.DBClose();
+            CustomerMainForm.editCustomer = this;
+            customerForm.Show();
+            CustomerMainForm.editCustomer.Close();
+        }
+
+        private void customerSaveButton_Click(object sender, EventArgs e)
+        {
+            // TODO Add input validation
+
+            DataInterface.updateCustomer(
+                Convert.ToInt32(customerIDTextBox.Text),
+                customerNameTextBox.Text,
+                customerAddressTextBox.Text,
+                customerCityTextBox.Text,
+                customerCountryTextBox.Text,
+                customerZipCodeTextBox.Text,
+                customerPhoneTextBox.Text,
+                1,
+                customerAddress2TextBox.Text);
+            DataInterface.DBClose();
+            CustomerMainForm.editCustomer = this;
+            customerForm.Show();
+            CustomerMainForm.editCustomer.Close();
         }
     }
 }

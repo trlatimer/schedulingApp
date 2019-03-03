@@ -35,6 +35,14 @@
             // 
             this.customerIDTextBox.Text = "";
             // 
+            // customerSaveButton
+            // 
+            this.customerSaveButton.Click += new System.EventHandler(this.customerSaveButton_Click);
+            // 
+            // customerCancelButton
+            // 
+            this.customerCancelButton.Click += new System.EventHandler(this.customerCancelButton_Click);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;

@@ -43,6 +43,10 @@
             // 
             this.customerCancelButton.Click += new System.EventHandler(this.customerCancelButton_Click);
             // 
+            // customerActiveCheckBox
+            // 
+            this.customerActiveCheckBox.CheckedChanged += new System.EventHandler(this.customerActiveCheckBox_CheckedChanged);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -61,6 +65,7 @@
             this.Controls.Add(this.label1);
             this.Name = "EditCustomerForm";
             this.Text = "editCustomerForm";
+            this.Controls.SetChildIndex(this.customerActiveCheckBox, 0);
             this.Controls.SetChildIndex(this.customerIDTextBox, 0);
             this.Controls.SetChildIndex(this.customerNameTextBox, 0);
             this.Controls.SetChildIndex(this.customerAddressTextBox, 0);

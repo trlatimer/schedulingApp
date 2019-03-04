@@ -30,12 +30,11 @@ namespace SchedulingApp
         private void displayCustomers()
         {
             DataInterface.DBOpen();
-            MySqlCommand cmd = new MySqlCommand("SELECT * FROM customer", DataInterface.conn);
-            MySqlDataAdapter adp = new MySqlDataAdapter(cmd);
-            DataTable dt = new DataTable();
-            adp.Fill(dt);
-            customersDGV.DataSource = dt;
-            customersDGV.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+            String query = "SELECT c.customerId AS ID, c.customerName AS Name, c.active AS Active, a.address AS Address, a.address2 AS Address2, a.city AS City, a.postalCode AS 'Postal Code', a.country AS Country, a.phone AS Phone " +
+                "FROM customer AS c, (SELECT address.addressId, address.address, address.address2, address.postalCode, address.phone, city.city, country.country FROM address, city, country WHERE address.cityId = city.cityId AND city.countryId = country.countryId) AS a " +
+                "WHERE c.addressId = a.addressId";
+            DataInterface.displayDGV(query, customersDGV);
         }
 
         private void customersDGV_CellContentClick(object sender, DataGridViewCellEventArgs e)

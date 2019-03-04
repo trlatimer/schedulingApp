@@ -32,8 +32,14 @@ namespace SchedulingApp
                 string country = customerCountryTextBox.Text;
                 string phone = customerPhoneTextBox.Text;
                 string currentUser = DataInterface.getCurrentUserName();
+                int active = 0;
 
-                DataInterface.createCustomer(name, address, city, country, zipCode, phone, 1, currentUser, address2);
+                if (customerActiveCheckBox.Checked)
+                {
+                    active = 1;
+                }
+
+                DataInterface.createCustomer(name, address, city, country, zipCode, phone, active, currentUser, address2);
                 CustomerMainForm.addCustomer = this;
                 customerForm.Show();
                 CustomerMainForm.addCustomer.Close();

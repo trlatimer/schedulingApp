@@ -23,7 +23,6 @@ namespace SchedulingApp
 
         private void setTextBoxText()
         {
-            
             selectedCustomer = DataInterface.getCustomerInfo(CustomerMainForm.selectedCustomerID);
 
             customerIDTextBox.Text = selectedCustomer["ID"];
@@ -34,6 +33,17 @@ namespace SchedulingApp
             customerPhoneTextBox.Text = selectedCustomer["Phone"];
             customerCityTextBox.Text = selectedCustomer["City"];
             customerCountryTextBox.Text = selectedCustomer["Country"];
+            customerActiveCheckBox.Checked = selectedCustomer["Active"];
+  
+
+            if (selectedCustomer["Active"])
+            {
+                customerActiveCheckBox.Checked = true;
+            }
+            else
+            {
+                customerActiveCheckBox.Checked = false;
+            }
         }
 
         private void customerCancelButton_Click(object sender, EventArgs e)
@@ -56,12 +66,24 @@ namespace SchedulingApp
                 customerCountryTextBox.Text,
                 customerZipCodeTextBox.Text,
                 customerPhoneTextBox.Text,
-                1,
+                active,
                 customerAddress2TextBox.Text);
             DataInterface.DBClose();
             CustomerMainForm.editCustomer = this;
             customerForm.Show();
             CustomerMainForm.editCustomer.Close();
+        }
+
+        private void customerActiveCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (customerActiveCheckBox.Checked)
+            {
+                active = 1;
+            }
+            else
+            {
+                active = 0;
+            }
         }
     }
 }

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using MySql.Data.MySqlClient;
+using System.Windows.Forms;
+using System.Collections;
 
 namespace SchedulingApp
 {
@@ -64,7 +66,7 @@ namespace SchedulingApp
                 if (ID > nextUserID)
                 {
                     nextUserID = ID;
-                } 
+                }
             }
             nextUserID++;
             return nextUserID;
@@ -95,6 +97,25 @@ namespace SchedulingApp
             conn.Close();
         }
 
+        // General function for filling DataGridViews
+        public static void displayDGV(String query, DataGridView DGV)
+        {
+            MySqlCommand cmd = new MySqlCommand(query, conn);
+            MySqlDataAdapter adp = new MySqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            adp.Fill(dt);
+            DGV.DataSource = dt;
+            DGV.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+        }
+
+        private IEnumerable<DictionaryEntry> CastDict(IDictionary dictionary)
+        {
+            foreach (DictionaryEntry entry in dictionary)
+            {
+                yield return entry;
+            }
+        }
+
         // Build Dictionary object for customer
         public static Dictionary<string, string> getCustomerInfo(int customerID)
         {
@@ -114,6 +135,7 @@ namespace SchedulingApp
                 Customer.Add("ID", reader[0].ToString());
                 Customer.Add("Name", reader[1].ToString());
                 Customer.Add("Active", reader[3].ToString());
+                Console.WriteLine("Active value is " + reader[3]);
             }
             else
             {
@@ -178,7 +200,7 @@ namespace SchedulingApp
         public static void createCustomer(string name, string address, string city, string country, string zipcode, string phoneNumber, int active, string creator, string secondAddress = " ")
         {
             // TODO Refactor
-           
+
             int id = getNextID("customerId", "customer", customerIDList);
             int addressID;
             int cityID;
@@ -191,7 +213,7 @@ namespace SchedulingApp
             }
 
             DBOpen();
-            
+
             // Check if country exists, if not, create a new one
             String query = $"SELECT countryId FROM country WHERE country = '{country}';";
             cmd = new MySqlCommand(query, conn);
@@ -318,7 +340,7 @@ namespace SchedulingApp
             }
 
             // Check update each table associated with customer
-            query = $"UPDATE customer SET customerName = '{name}', lastUpdateBy = '{currentUserName}' WHERE customerId = '{ID}'";
+            query = $"UPDATE customer SET customerName = '{name}', active = '{active}',  lastUpdateBy = '{currentUserName}' WHERE customerId = '{ID}'";
             cmd = new MySqlCommand(query, conn);
             cmd.ExecuteNonQuery();
 

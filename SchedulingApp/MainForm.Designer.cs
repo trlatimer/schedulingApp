@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.mainWelcomeLabel = new System.Windows.Forms.Label();
-            this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.appointmentCalendar = new System.Windows.Forms.MonthCalendar();
+            this.appointmentsDGV = new System.Windows.Forms.DataGridView();
             this.dgvViewMonthRadioButton = new System.Windows.Forms.RadioButton();
             this.dgvViewWeekRadioButton = new System.Windows.Forms.RadioButton();
             this.dgvViewDayRadioButton = new System.Windows.Forms.RadioButton();
@@ -41,7 +41,7 @@
             this.mainDeleteButton = new System.Windows.Forms.Button();
             this.mainLogoutButton = new System.Windows.Forms.Button();
             this.mainCustomerButton = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.appointmentsDGV)).BeginInit();
             this.dgvViewGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,23 +55,24 @@
             this.mainWelcomeLabel.TabIndex = 0;
             this.mainWelcomeLabel.Text = "Welcome!";
             // 
-            // monthCalendar1
+            // appointmentCalendar
             // 
-            this.monthCalendar1.Location = new System.Drawing.Point(18, 53);
-            this.monthCalendar1.Name = "monthCalendar1";
-            this.monthCalendar1.TabIndex = 1;
+            this.appointmentCalendar.FirstDayOfWeek = System.Windows.Forms.Day.Sunday;
+            this.appointmentCalendar.Location = new System.Drawing.Point(18, 53);
+            this.appointmentCalendar.Name = "appointmentCalendar";
+            this.appointmentCalendar.TabIndex = 1;
             // 
-            // dataGridView1
+            // appointmentsDGV
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AllowUserToOrderColumns = true;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(268, 82);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.Size = new System.Drawing.Size(460, 244);
-            this.dataGridView1.TabIndex = 2;
+            this.appointmentsDGV.AllowUserToAddRows = false;
+            this.appointmentsDGV.AllowUserToDeleteRows = false;
+            this.appointmentsDGV.AllowUserToOrderColumns = true;
+            this.appointmentsDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.appointmentsDGV.Location = new System.Drawing.Point(268, 82);
+            this.appointmentsDGV.Name = "appointmentsDGV";
+            this.appointmentsDGV.RowHeadersVisible = false;
+            this.appointmentsDGV.Size = new System.Drawing.Size(460, 244);
+            this.appointmentsDGV.TabIndex = 2;
             // 
             // dgvViewMonthRadioButton
             // 
@@ -136,6 +137,7 @@
             this.mainAddButton.TabIndex = 11;
             this.mainAddButton.Text = "Add";
             this.mainAddButton.UseVisualStyleBackColor = true;
+            this.mainAddButton.Click += new System.EventHandler(this.mainAddButton_Click);
             // 
             // mainEditButton
             // 
@@ -188,14 +190,14 @@
             this.Controls.Add(this.mainAddButton);
             this.Controls.Add(this.mainExitButton);
             this.Controls.Add(this.dgvViewGroupBox);
-            this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.monthCalendar1);
+            this.Controls.Add(this.appointmentsDGV);
+            this.Controls.Add(this.appointmentCalendar);
             this.Controls.Add(this.mainWelcomeLabel);
             this.Name = "MainForm";
             this.Text = "Schedule App | Home";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.appointmentsDGV)).EndInit();
             this.dgvViewGroupBox.ResumeLayout(false);
             this.dgvViewGroupBox.PerformLayout();
             this.ResumeLayout(false);
@@ -206,8 +208,8 @@
         #endregion
 
         private System.Windows.Forms.Label mainWelcomeLabel;
-        private System.Windows.Forms.MonthCalendar monthCalendar1;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.MonthCalendar appointmentCalendar;
+        private System.Windows.Forms.DataGridView appointmentsDGV;
         private System.Windows.Forms.RadioButton dgvViewMonthRadioButton;
         private System.Windows.Forms.RadioButton dgvViewWeekRadioButton;
         private System.Windows.Forms.RadioButton dgvViewDayRadioButton;

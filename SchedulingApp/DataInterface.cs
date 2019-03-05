@@ -282,7 +282,6 @@ namespace SchedulingApp
             // TODO Refactor
             // TODO Create general query function
             // TODO check if TextBox changed
-            // TODO active active checkbox
 
             int addressID = -1;
             int cityID = -1;
@@ -398,6 +397,19 @@ namespace SchedulingApp
             return nextID;
         }
 
+       // public static void createAppointment(int customerId, string title, string description, string location, string contact, string url)
+       // {
+       //     int id = getNextUserID();
+       //     string currentDateTime = getCurrentDateTime();
+       //     String sqlString = $"INSERT INTO user(userId, userName, password, active, createBy, createDate, lastUpdatedBy) VALUES ('{id}', '{username}', '{password}', '{active}', '{creator}', '{currentDateTime}', '{creator}');";
+       //
+       //     // Establish and open database connection
+       //     DBOpen();
+       //     cmd = new MySqlCommand(sqlString, conn);
+       //     cmd.ExecuteNonQuery();
+       //     DBClose();
+       // }
+
         public static void generatePsuedoData()
         {
             DBOpen();
@@ -425,7 +437,6 @@ namespace SchedulingApp
             // Create customers
             createCustomer("John Doe", "1111 Some St", "New York, New York", "United States", "10001", "111-111-1111", 1, "ADMIN");
             createCustomer("Jane Doe", "1112 Some St", "New York, New York", "United States", "10001", "111-111-1112", 1, "ADMIN");
-
 
             DBClose();
         }

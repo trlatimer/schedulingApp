@@ -15,24 +15,21 @@ namespace SchedulingApp
     {
         public static LoginForm loginForm = null;
         public static CustomerMainForm customerForm = null;
+        public static AddAppointmentForm addAppointmentForm = null;
         
 
         public MainForm()
         {
             InitializeComponent();
-
-           // DataInterface.DBOpen();
-           // MySqlCommand cmd = new MySqlCommand("SELECT * FROM user", DataInterface.conn);
-           // MySqlDataAdapter adp = new MySqlDataAdapter(cmd);
-           // DataTable dt = new DataTable();
-           // adp.Fill(dt);
-           // dataGridView1.DataSource = dt;
-           // dataGridView1.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            displayAppointments();
         }
 
         private void displayAppointments()
         {
-            // TODO ADD APPOINTMENT FUNCTIONALITY
+            DataInterface.DBOpen();
+
+            String query = "SELECT appointmentId, customerId, title, contact, start, end FROM appointment";
+            DataInterface.displayDGV(query, appointmentsDGV);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -64,6 +61,14 @@ namespace SchedulingApp
             CustomerMainForm.mainForm = this;
             this.Hide();
             customerForm.Show();
+        }
+
+        private void mainAddButton_Click(object sender, EventArgs e)
+        {
+            DataInterface.DBClose();
+            AddAppointmentForm appointmentForm = new AddAppointmentForm();
+            AddAppointmentForm.mainForm = this;
+            appointmentForm.Show();
         }
     }
 }

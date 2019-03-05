@@ -35,6 +35,30 @@
             // 
             this.customerIDTextBox.Text = "";
             // 
+            // customerNameTextBox
+            // 
+            this.customerNameTextBox.TextChanged += new System.EventHandler(this.customerNameTextBox_TextChanged);
+            // 
+            // customerAddressTextBox
+            // 
+            this.customerAddressTextBox.TextChanged += new System.EventHandler(this.customerAddressTextBox_TextChanged);
+            // 
+            // customerCityTextBox
+            // 
+            this.customerCityTextBox.TextChanged += new System.EventHandler(this.customerCityTextBox_TextChanged);
+            // 
+            // customerZipCodeTextBox
+            // 
+            this.customerZipCodeTextBox.TextChanged += new System.EventHandler(this.customerZipCodeTextBox_TextChanged);
+            // 
+            // customerPhoneTextBox
+            // 
+            this.customerPhoneTextBox.TextChanged += new System.EventHandler(this.customerPhoneTextBox_TextChanged);
+            // 
+            // customerCountryTextBox
+            // 
+            this.customerCountryTextBox.TextChanged += new System.EventHandler(this.customerCountryTextBox_TextChanged);
+            // 
             // customerSaveButton
             // 
             this.customerSaveButton.Click += new System.EventHandler(this.customerSaveButton_Click);
@@ -43,9 +67,9 @@
             // 
             this.customerCancelButton.Click += new System.EventHandler(this.customerCancelButton_Click);
             // 
-            // customerActiveCheckBox
+            // customerAddress2TextBox
             // 
-            this.customerActiveCheckBox.CheckedChanged += new System.EventHandler(this.customerActiveCheckBox_CheckedChanged);
+            this.customerAddress2TextBox.TextChanged += new System.EventHandler(this.customerAddress2TextBox_TextChanged);
             // 
             // label1
             // 

@@ -108,19 +108,13 @@ namespace SchedulingApp
             DGV.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
-        private IEnumerable<DictionaryEntry> CastDict(IDictionary dictionary)
-        {
-            foreach (DictionaryEntry entry in dictionary)
-            {
-                yield return entry;
-            }
-        }
-
         // Build Dictionary object for customer
-        public static Dictionary<string, string> getCustomerInfo(int customerID)
+        public static Dictionary<string, object> getCustomerInfo(int customerID)
         {
-            Dictionary<string, string> Customer = new Dictionary<string, string>();
+            Dictionary<string, object> Customer = new Dictionary<string, object>();
             string addressID;
+
+
 
             // Retrieve details from customer table that match customerID
             string query = $"SELECT * FROM customer WHERE customerId = '{customerID.ToString()}'";
@@ -134,8 +128,7 @@ namespace SchedulingApp
                 addressID = reader[2].ToString();
                 Customer.Add("ID", reader[0].ToString());
                 Customer.Add("Name", reader[1].ToString());
-                Customer.Add("Active", reader[3].ToString());
-                Console.WriteLine("Active value is " + reader[3]);
+                Customer.Add("Active", (bool) reader[3]);
             }
             else
             {
@@ -284,7 +277,7 @@ namespace SchedulingApp
             DBClose();
         }
 
-        public static void updateCustomer(int ID, string name, string address, string city, string country, string zipcode, string phoneNumber, int active, string secondAddress = " ")
+        public static void updateCustomer(int ID, string name, string address, string city, string country, string zipcode, string phoneNumber, bool active, string secondAddress = " ")
         {
             // TODO Refactor
             // TODO Create general query function
@@ -294,6 +287,7 @@ namespace SchedulingApp
             int addressID = -1;
             int cityID = -1;
             int countryID = -1;
+            int activeInt;
             String currentDateTime = getCurrentDateTime();
 
             if (conn.State == ConnectionState.Open)
@@ -339,8 +333,17 @@ namespace SchedulingApp
                 throw new Exception("Unable to obtain ID's for associated customer data. Please try again.");
             }
 
+            if (active == true)
+            {
+                activeInt = 1;
+            }
+            else
+            {
+                activeInt = 0;
+            }
+
             // Check update each table associated with customer
-            query = $"UPDATE customer SET customerName = '{name}', active = '{active}',  lastUpdateBy = '{currentUserName}' WHERE customerId = '{ID}'";
+            query = $"UPDATE customer SET customerName = '{name}', active = '{activeInt}',  lastUpdateBy = '{currentUserName}' WHERE customerId = '{ID}'";
             cmd = new MySqlCommand(query, conn);
             cmd.ExecuteNonQuery();
 

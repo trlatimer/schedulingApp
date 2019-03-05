@@ -71,7 +71,7 @@ namespace SchedulingApp
             return valid;
         }
 
-        private void checkTextChanged(Control control)
+        public static void checkTextChanged(Control control)
         {
             if (String.IsNullOrWhiteSpace(control.Text))
             {

@@ -33,16 +33,21 @@
             // appointmentCustomerComboBox
             // 
             this.appointmentCustomerComboBox.Size = new System.Drawing.Size(142, 24);
+            this.appointmentCustomerComboBox.SelectedIndexChanged += new System.EventHandler(this.appointmentCustomerComboBox_SelectedIndexChanged);
             // 
             // appointmentCancelButton
             // 
             this.appointmentCancelButton.Click += new System.EventHandler(this.appointmentCancelButton_Click);
             // 
+            // appointmentSaveButton
+            // 
+            this.appointmentSaveButton.Click += new System.EventHandler(this.appointmentSaveButton_Click);
+            // 
             // AddAppointmentForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(442, 450);
+            this.ClientSize = new System.Drawing.Size(442, 470);
             this.Name = "AddAppointmentForm";
             this.Text = "AddAppointmentForm";
             this.ResumeLayout(false);

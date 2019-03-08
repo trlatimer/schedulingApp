@@ -46,8 +46,8 @@
             this.appointmentCustomerComboBox = new System.Windows.Forms.ComboBox();
             this.appointmentCancelButton = new System.Windows.Forms.Button();
             this.appointmentSaveButton = new System.Windows.Forms.Button();
-            this.appointmentStartTime = new System.Windows.Forms.DateTimePicker();
-            this.appointmentEndTime = new System.Windows.Forms.DateTimePicker();
+            this.label1 = new System.Windows.Forms.Label();
+            this.appointmentContactTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // appointmentIDLabel
@@ -55,7 +55,7 @@
             this.appointmentIDLabel.AutoSize = true;
             this.appointmentIDLabel.Location = new System.Drawing.Point(35, 64);
             this.appointmentIDLabel.Name = "appointmentIDLabel";
-            this.appointmentIDLabel.Size = new System.Drawing.Size(102, 16);
+            this.appointmentIDLabel.Size = new System.Drawing.Size(195, 30);
             this.appointmentIDLabel.TabIndex = 0;
             this.appointmentIDLabel.Text = "Appointment ID:";
             // 
@@ -64,7 +64,7 @@
             this.appointmentCustomerLabel.AutoSize = true;
             this.appointmentCustomerLabel.Location = new System.Drawing.Point(69, 93);
             this.appointmentCustomerLabel.Name = "appointmentCustomerLabel";
-            this.appointmentCustomerLabel.Size = new System.Drawing.Size(68, 16);
+            this.appointmentCustomerLabel.Size = new System.Drawing.Size(132, 30);
             this.appointmentCustomerLabel.TabIndex = 1;
             this.appointmentCustomerLabel.Text = "Customer:";
             // 
@@ -73,16 +73,16 @@
             this.appointmentTitleLabel.AutoSize = true;
             this.appointmentTitleLabel.Location = new System.Drawing.Point(100, 122);
             this.appointmentTitleLabel.Name = "appointmentTitleLabel";
-            this.appointmentTitleLabel.Size = new System.Drawing.Size(37, 16);
+            this.appointmentTitleLabel.Size = new System.Drawing.Size(69, 30);
             this.appointmentTitleLabel.TabIndex = 2;
             this.appointmentTitleLabel.Text = "Title:";
             // 
             // appointmentDescriptionLabel
             // 
             this.appointmentDescriptionLabel.AutoSize = true;
-            this.appointmentDescriptionLabel.Location = new System.Drawing.Point(58, 259);
+            this.appointmentDescriptionLabel.Location = new System.Drawing.Point(58, 287);
             this.appointmentDescriptionLabel.Name = "appointmentDescriptionLabel";
-            this.appointmentDescriptionLabel.Size = new System.Drawing.Size(79, 16);
+            this.appointmentDescriptionLabel.Size = new System.Drawing.Size(149, 30);
             this.appointmentDescriptionLabel.TabIndex = 3;
             this.appointmentDescriptionLabel.Text = "Description:";
             // 
@@ -91,51 +91,51 @@
             this.appointmentLocationLabel.AutoSize = true;
             this.appointmentLocationLabel.Location = new System.Drawing.Point(75, 148);
             this.appointmentLocationLabel.Name = "appointmentLocationLabel";
-            this.appointmentLocationLabel.Size = new System.Drawing.Size(62, 16);
+            this.appointmentLocationLabel.Size = new System.Drawing.Size(116, 30);
             this.appointmentLocationLabel.TabIndex = 4;
             this.appointmentLocationLabel.Text = "Location:";
             // 
             // appointmentURLLabel
             // 
             this.appointmentURLLabel.AutoSize = true;
-            this.appointmentURLLabel.Location = new System.Drawing.Point(99, 176);
+            this.appointmentURLLabel.Location = new System.Drawing.Point(99, 204);
             this.appointmentURLLabel.Name = "appointmentURLLabel";
-            this.appointmentURLLabel.Size = new System.Drawing.Size(38, 16);
+            this.appointmentURLLabel.Size = new System.Drawing.Size(72, 30);
             this.appointmentURLLabel.TabIndex = 5;
             this.appointmentURLLabel.Text = "URL:";
             // 
             // appointmentStartDate
             // 
             this.appointmentStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.appointmentStartDate.Location = new System.Drawing.Point(187, 200);
+            this.appointmentStartDate.Location = new System.Drawing.Point(187, 228);
             this.appointmentStartDate.Name = "appointmentStartDate";
-            this.appointmentStartDate.Size = new System.Drawing.Size(100, 22);
+            this.appointmentStartDate.Size = new System.Drawing.Size(142, 37);
             this.appointmentStartDate.TabIndex = 4;
             // 
             // appointmentStartLabel
             // 
             this.appointmentStartLabel.AutoSize = true;
-            this.appointmentStartLabel.Location = new System.Drawing.Point(99, 205);
+            this.appointmentStartLabel.Location = new System.Drawing.Point(99, 233);
             this.appointmentStartLabel.Name = "appointmentStartLabel";
-            this.appointmentStartLabel.Size = new System.Drawing.Size(38, 16);
+            this.appointmentStartLabel.Size = new System.Drawing.Size(74, 30);
             this.appointmentStartLabel.TabIndex = 7;
             this.appointmentStartLabel.Text = "Start:";
             // 
             // appointmentEndLabel
             // 
             this.appointmentEndLabel.AutoSize = true;
-            this.appointmentEndLabel.Location = new System.Drawing.Point(102, 232);
+            this.appointmentEndLabel.Location = new System.Drawing.Point(102, 260);
             this.appointmentEndLabel.Name = "appointmentEndLabel";
-            this.appointmentEndLabel.Size = new System.Drawing.Size(35, 16);
+            this.appointmentEndLabel.Size = new System.Drawing.Size(65, 30);
             this.appointmentEndLabel.TabIndex = 8;
             this.appointmentEndLabel.Text = "End:";
             // 
             // appointmentEndDate
             // 
             this.appointmentEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.appointmentEndDate.Location = new System.Drawing.Point(187, 227);
+            this.appointmentEndDate.Location = new System.Drawing.Point(187, 255);
             this.appointmentEndDate.Name = "appointmentEndDate";
-            this.appointmentEndDate.Size = new System.Drawing.Size(100, 22);
+            this.appointmentEndDate.Size = new System.Drawing.Size(142, 37);
             this.appointmentEndDate.TabIndex = 5;
             // 
             // appointmentIDTextBox
@@ -144,7 +144,7 @@
             this.appointmentIDTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.appointmentIDTextBox.Location = new System.Drawing.Point(187, 61);
             this.appointmentIDTextBox.Name = "appointmentIDTextBox";
-            this.appointmentIDTextBox.Size = new System.Drawing.Size(142, 22);
+            this.appointmentIDTextBox.Size = new System.Drawing.Size(142, 37);
             this.appointmentIDTextBox.TabIndex = 10;
             this.appointmentIDTextBox.Text = "-- Auto-Implemented--";
             this.appointmentIDTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -153,12 +153,12 @@
             // 
             this.appointmentTitleTextBox.Location = new System.Drawing.Point(187, 119);
             this.appointmentTitleTextBox.Name = "appointmentTitleTextBox";
-            this.appointmentTitleTextBox.Size = new System.Drawing.Size(142, 22);
+            this.appointmentTitleTextBox.Size = new System.Drawing.Size(142, 37);
             this.appointmentTitleTextBox.TabIndex = 1;
             // 
             // appointmentDescriptionTextBox
             // 
-            this.appointmentDescriptionTextBox.Location = new System.Drawing.Point(48, 278);
+            this.appointmentDescriptionTextBox.Location = new System.Drawing.Point(48, 306);
             this.appointmentDescriptionTextBox.Multiline = true;
             this.appointmentDescriptionTextBox.Name = "appointmentDescriptionTextBox";
             this.appointmentDescriptionTextBox.Size = new System.Drawing.Size(354, 104);
@@ -168,14 +168,14 @@
             // 
             this.appointmentLocationTextBox.Location = new System.Drawing.Point(187, 145);
             this.appointmentLocationTextBox.Name = "appointmentLocationTextBox";
-            this.appointmentLocationTextBox.Size = new System.Drawing.Size(100, 22);
+            this.appointmentLocationTextBox.Size = new System.Drawing.Size(142, 37);
             this.appointmentLocationTextBox.TabIndex = 2;
             // 
             // appointmentURLTextBox
             // 
-            this.appointmentURLTextBox.Location = new System.Drawing.Point(187, 173);
+            this.appointmentURLTextBox.Location = new System.Drawing.Point(187, 201);
             this.appointmentURLTextBox.Name = "appointmentURLTextBox";
-            this.appointmentURLTextBox.Size = new System.Drawing.Size(100, 22);
+            this.appointmentURLTextBox.Size = new System.Drawing.Size(142, 37);
             this.appointmentURLTextBox.TabIndex = 3;
             // 
             // appointmentCustomerComboBox
@@ -183,12 +183,12 @@
             this.appointmentCustomerComboBox.FormattingEnabled = true;
             this.appointmentCustomerComboBox.Location = new System.Drawing.Point(187, 90);
             this.appointmentCustomerComboBox.Name = "appointmentCustomerComboBox";
-            this.appointmentCustomerComboBox.Size = new System.Drawing.Size(142, 24);
+            this.appointmentCustomerComboBox.Size = new System.Drawing.Size(142, 38);
             this.appointmentCustomerComboBox.TabIndex = 0;
             // 
             // appointmentCancelButton
             // 
-            this.appointmentCancelButton.Location = new System.Drawing.Point(72, 403);
+            this.appointmentCancelButton.Location = new System.Drawing.Point(72, 431);
             this.appointmentCancelButton.Name = "appointmentCancelButton";
             this.appointmentCancelButton.Size = new System.Drawing.Size(75, 23);
             this.appointmentCancelButton.TabIndex = 7;
@@ -197,37 +197,37 @@
             // 
             // appointmentSaveButton
             // 
-            this.appointmentSaveButton.Location = new System.Drawing.Point(304, 403);
+            this.appointmentSaveButton.Location = new System.Drawing.Point(304, 431);
             this.appointmentSaveButton.Name = "appointmentSaveButton";
             this.appointmentSaveButton.Size = new System.Drawing.Size(75, 23);
             this.appointmentSaveButton.TabIndex = 8;
             this.appointmentSaveButton.Text = "Save";
             this.appointmentSaveButton.UseVisualStyleBackColor = true;
             // 
-            // appointmentStartTime
+            // label1
             // 
-            this.appointmentStartTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.appointmentStartTime.Location = new System.Drawing.Point(293, 200);
-            this.appointmentStartTime.Name = "appointmentStartTime";
-            this.appointmentStartTime.Size = new System.Drawing.Size(99, 22);
-            this.appointmentStartTime.TabIndex = 11;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(81, 177);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(108, 30);
+            this.label1.TabIndex = 13;
+            this.label1.Text = "Contact:";
             // 
-            // appointmentEndTime
+            // appointmentContactTextBox
             // 
-            this.appointmentEndTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.appointmentEndTime.Location = new System.Drawing.Point(293, 227);
-            this.appointmentEndTime.Name = "appointmentEndTime";
-            this.appointmentEndTime.Size = new System.Drawing.Size(99, 22);
-            this.appointmentEndTime.TabIndex = 12;
+            this.appointmentContactTextBox.Location = new System.Drawing.Point(187, 174);
+            this.appointmentContactTextBox.Name = "appointmentContactTextBox";
+            this.appointmentContactTextBox.Size = new System.Drawing.Size(142, 37);
+            this.appointmentContactTextBox.TabIndex = 14;
             // 
             // AppointmentForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(15F, 30F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ClientSize = new System.Drawing.Size(436, 453);
-            this.Controls.Add(this.appointmentEndTime);
-            this.Controls.Add(this.appointmentStartTime);
+            this.ClientSize = new System.Drawing.Size(431, 475);
+            this.Controls.Add(this.appointmentContactTextBox);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.appointmentSaveButton);
             this.Controls.Add(this.appointmentCancelButton);
             this.Controls.Add(this.appointmentCustomerComboBox);
@@ -275,7 +275,7 @@
         protected System.Windows.Forms.ComboBox appointmentCustomerComboBox;
         protected System.Windows.Forms.Button appointmentCancelButton;
         protected System.Windows.Forms.Button appointmentSaveButton;
-        private System.Windows.Forms.DateTimePicker appointmentStartTime;
-        private System.Windows.Forms.DateTimePicker appointmentEndTime;
+        protected System.Windows.Forms.Label label1;
+        protected System.Windows.Forms.TextBox appointmentContactTextBox;
     }
 }

@@ -13,6 +13,16 @@ namespace SchedulingApp
     public partial class AddCustomerForm : SchedulingAppBaseForms.CustomerForm
     {
         public static CustomerMainForm customerForm = null;
+        private int ID;
+        private string name;
+        private string address;
+        private string address2;
+        private string city;
+        private string zipCode;
+        private string country;
+        private string phone;
+        bool active;
+        private string currentUser = DataInterface.getCurrentUserName();
 
         public AddCustomerForm()
         {
@@ -23,21 +33,15 @@ namespace SchedulingApp
         {
             if (validateInputs())
             {
-                int ID = DataInterface.getNextID("customerId", "customer", DataInterface.getCustomerIDList());
-                string name = customerNameTextBox.Text;
-                string address = customerAddressTextBox.Text;
-                string address2 = customerAddress2TextBox.Text;
-                string city = customerCityTextBox.Text;
-                string zipCode = customerZipCodeTextBox.Text;
-                string country = customerCountryTextBox.Text;
-                string phone = customerPhoneTextBox.Text;
-                string currentUser = DataInterface.getCurrentUserName();
-                int active = 0;
-
-                if (customerActiveCheckBox.Checked)
-                {
-                    active = 1;
-                }
+                ID = DataInterface.getNextID("customerId", "customer", DataInterface.getCustomerIDList());
+                name = customerNameTextBox.Text;
+                address = customerAddressTextBox.Text;
+                address2 = customerAddress2TextBox.Text;
+                city = customerCityTextBox.Text;
+                zipCode = customerZipCodeTextBox.Text;
+                country = customerCountryTextBox.Text;
+                phone = customerPhoneTextBox.Text;
+                active = customerActiveCheckBox.Checked;
 
                 DataInterface.createCustomer(name, address, city, country, zipCode, phone, active, currentUser, address2);
                 CustomerMainForm.addCustomer = this;

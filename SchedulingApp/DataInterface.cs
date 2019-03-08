@@ -7,6 +7,7 @@ using System.Data;
 using MySql.Data.MySqlClient;
 using System.Windows.Forms;
 using System.Collections;
+using System.Globalization;
 
 namespace SchedulingApp
 {
@@ -19,10 +20,15 @@ namespace SchedulingApp
         private static List<int> countryIDList = new List<int>();
         private static List<int> cityIDList = new List<int>();
         private static List<int> addressIDList = new List<int>();
-        public static string connectionString = "server=52.206.157.109;userid=U05Csd;database=U05Csd;password=53688462289";
+        private static List<int> appointmentIDList = new List<int>();
+        public static string connectionString = "server=52.206.157.109;userid=U05Csd;database=U05Csd;password=53688462289;convert zero datetime=true;";
         public static MySqlConnection conn = new MySqlConnection(connectionString);
         public static MySqlCommand cmd;
         public static MySqlDataReader reader;
+        public static DataTable appointmentTable = new DataTable("Appointments");
+        public static DataColumn dtColumn;
+        public static DataRow dtRow;
+        public static DataSet dtSet;
 
         public static int getCurrentUserID()
         {
@@ -37,6 +43,11 @@ namespace SchedulingApp
         public static List<int> getCustomerIDList()
         {
             return customerIDList;
+        }
+        
+        public static List<int> getAppointmentIDList()
+        {
+            return appointmentIDList;
         }
 
         public static void setCurrentUserID(int userID)
@@ -74,7 +85,8 @@ namespace SchedulingApp
 
         public static string getCurrentDateTime()
         {
-            string currentDateTime = DateTime.UtcNow.ToString("u");
+            var isoDateTimeFormat = CultureInfo.InvariantCulture.DateTimeFormat;
+            string currentDateTime = DateTime.Now.ToString(isoDateTimeFormat.SortableDateTimePattern);
             return currentDateTime;
         }
 
@@ -106,6 +118,74 @@ namespace SchedulingApp
             adp.Fill(dt);
             DGV.DataSource = dt;
             DGV.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+        }
+
+        public static void createAppointmentTable()
+        {
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(Int32);
+            dtColumn.ColumnName = "ID";
+            appointmentTable.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "Customer";
+            appointmentTable.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "Title";
+            appointmentTable.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "Start";
+            appointmentTable.Columns.Add(dtColumn);
+
+            dtColumn = new DataColumn();
+            dtColumn.DataType = typeof(string);
+            dtColumn.ColumnName = "End";
+            appointmentTable.Columns.Add(dtColumn);
+
+            DataColumn[] PrimaryKeyColumns = new DataColumn[1];
+            PrimaryKeyColumns[0] = appointmentTable.Columns["ID"];
+            appointmentTable.PrimaryKey = PrimaryKeyColumns;
+
+            dtSet = new DataSet();
+            dtSet.Tables.Add(appointmentTable);
+        }
+
+        public static void displayAppointments(DataGridView dgv)
+        {
+            DBOpen();
+            // Fix CONVERT_TZ(start, '+00:00', '{offset}') AS 'Start Time'    WHERE a.createBy = '{currentUserName}'
+            String query = $"SELECT a.appointmentId, c.customerName, a.title, a.start, a.end FROM appointment AS a, customer AS c WHERE c.customerId = a.customerId";
+            //DataInterface.displayDGV(query, appointmentsDGV);
+            DBOpen();
+            MySqlCommand cmd = new MySqlCommand(query, conn);
+            MySqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                dtRow = appointmentTable.NewRow();
+                dtRow["ID"] = Convert.ToInt32(reader[0]);
+                dtRow["Customer"] = reader[1].ToString();
+                dtRow["Title"] = reader[2].ToString();
+                dtRow["Start"] = convertToLocal(reader[3].ToString());
+                dtRow["End"] = convertToLocal(reader[4].ToString());
+
+            }
+            reader.Close();
+            BindingSource bindingSource = new BindingSource();
+            bindingSource.DataSource = dtSet.Tables["Customers"];
+            dgv.DataSource = bindingSource;
+            DBClose();
+        }
+
+        public static string convertToLocal(string time)
+        {
+            DateTime utcDateTime = DateTime.Parse(time);
+            DateTime localDateTime = utcDateTime.ToLocalTime();
+            return localDateTime.ToString("MM/dd/yyyy hh:mm tt");
         }
 
         // Build Dictionary object for customer
@@ -190,7 +270,7 @@ namespace SchedulingApp
         }
 
         // Create a new customer
-        public static void createCustomer(string name, string address, string city, string country, string zipcode, string phoneNumber, int active, string creator, string secondAddress = " ")
+        public static void createCustomer(string name, string address, string city, string country, string zipcode, string phoneNumber, bool active, string creator, string secondAddress = " ")
         {
             // TODO Refactor
 
@@ -198,7 +278,17 @@ namespace SchedulingApp
             int addressID;
             int cityID;
             int countryID;
+            int activeInt;
             String currentDateTime = getCurrentDateTime();
+
+            if (active == true)
+            {
+                activeInt = 1;
+            }
+            else
+            {
+                activeInt = 0;
+            }
 
             if (conn.State == ConnectionState.Open)
             {
@@ -271,7 +361,7 @@ namespace SchedulingApp
             reader.Close();
 
             // Create new customer
-            query = $"INSERT INTO customer(customerId, customerName, addressId, active, createDate, createdBy, lastUpdateBy) VALUES ('{id}', '{name}', '{addressID}', '{active}', '{currentDateTime}', '{creator}', '{creator}');";
+            query = $"INSERT INTO customer(customerId, customerName, addressId, active, createDate, createdBy, lastUpdateBy) VALUES ('{id}', '{name}', '{addressID}', '{activeInt}', '{currentDateTime}', '{creator}', '{creator}');";
             cmd = new MySqlCommand(query, conn);
             cmd.ExecuteNonQuery();
             DBClose();
@@ -280,8 +370,7 @@ namespace SchedulingApp
         public static void updateCustomer(int ID, string name, string address, string city, string country, string zipcode, string phoneNumber, bool active, string secondAddress = " ")
         {
             // TODO Refactor
-            // TODO Create general query function
-            // TODO check if TextBox changed
+            // TODO Implement ability to check if other customers use address, city, country and create new as necessary
 
             int addressID = -1;
             int cityID = -1;
@@ -341,7 +430,7 @@ namespace SchedulingApp
                 activeInt = 0;
             }
 
-            // Check update each table associated with customer
+            // Update each table associated with customer
             query = $"UPDATE customer SET customerName = '{name}', active = '{activeInt}',  lastUpdateBy = '{currentUserName}' WHERE customerId = '{ID}'";
             cmd = new MySqlCommand(query, conn);
             cmd.ExecuteNonQuery();
@@ -397,18 +486,18 @@ namespace SchedulingApp
             return nextID;
         }
 
-       // public static void createAppointment(int customerId, string title, string description, string location, string contact, string url)
-       // {
-       //     int id = getNextUserID();
-       //     string currentDateTime = getCurrentDateTime();
-       //     String sqlString = $"INSERT INTO user(userId, userName, password, active, createBy, createDate, lastUpdatedBy) VALUES ('{id}', '{username}', '{password}', '{active}', '{creator}', '{currentDateTime}', '{creator}');";
-       //
-       //     // Establish and open database connection
-       //     DBOpen();
-       //     cmd = new MySqlCommand(sqlString, conn);
-       //     cmd.ExecuteNonQuery();
-       //     DBClose();
-       // }
+        public static void createAppointment(int customerId, string title, string description, string location, string contact, string url, string startTime, string endTime, string creator)
+        {
+            int id = getNextID("appointmentId", "appointment", appointmentIDList);
+            string currentDateTime = getCurrentDateTime();
+            String sqlString = $"INSERT INTO appointment(appointmentId, customerId, title, description, location, contact, url, start, end, createDate, createdBy, lastUpdateBy) VALUES ('{id}', '{customerId}', '{title}', '{description}', '{location}', '{contact}', '{url}', '{startTime}', '{endTime}', '{currentDateTime}', '{creator}', '{creator}');";
+
+            // Establish and open database connection
+            DBOpen();
+            cmd = new MySqlCommand(sqlString, conn);
+            cmd.ExecuteNonQuery();
+            DBClose();
+        }
 
         public static void generatePsuedoData()
         {
@@ -435,8 +524,9 @@ namespace SchedulingApp
             reader.Close();
 
             // Create customers
-            createCustomer("John Doe", "1111 Some St", "New York, New York", "United States", "10001", "111-111-1111", 1, "ADMIN");
-            createCustomer("Jane Doe", "1112 Some St", "New York, New York", "United States", "10001", "111-111-1112", 1, "ADMIN");
+            createCustomer("John Doe", "1111 Some St", "New York, New York", "United States", "10001", "111-111-1111", true, "ADMIN");
+            createCustomer("Jane Doe", "1112 Some St", "New York, New York", "United States", "10001", "111-111-1112", true, "ADMIN");
+            createAppointment(2, "Interview", "Interview for software developer position", "RM 201", "Jane Doe", "testUrl", $"{getCurrentDateTime()}" , $"{getCurrentDateTime()}", "ADMIN");
 
             DBClose();
         }

@@ -15,7 +15,11 @@ namespace SchedulingAppBaseForms
         public AppointmentForm()
         {
             InitializeComponent();
-            appointmentStartDate.CustomFormat = "MM/DD/YYYY HH:MM:SS";
+            appointmentStartDate.Format = DateTimePickerFormat.Custom;
+            appointmentStartDate.CustomFormat = "MM-dd-yyyy hh:mm:ss";
+            appointmentEndDate.Format = DateTimePickerFormat.Custom;
+            appointmentEndDate.CustomFormat = "MM-dd-yyyy hh:mm:ss";
+            //appointmentStartDate.CustomFormat = "MM/DD/YYYY HH:MM:SS";
         }
     }
 }

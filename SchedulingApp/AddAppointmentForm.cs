@@ -22,8 +22,8 @@ namespace SchedulingApp
         private string location;
         private string contact;
         private string url;
-        private DateTime startDateTime;
-        private DateTime endDateTime;
+        private string start;
+        private string end;
         private string currentUser = DataInterface.getCurrentUserName();
         private int selectedCustomerID;
 
@@ -51,17 +51,6 @@ namespace SchedulingApp
             appointmentCustomerComboBox.DataSource = dt;
             appointmentCustomerComboBox.DisplayMember = "customerName";
             appointmentCustomerComboBox.ValueMember = "customerId";
-
-
-            //MySqlCommand cmd = new MySqlCommand(query, DataInterface.conn);
-            //MySqlDataReader reader = cmd.ExecuteReader();
-            //while (reader.Read())
-            //{
-            //    //appointmentCustomerComboBox.Items.Add(reader.GetString("customerName"));\
-            //    //Console.WriteLine(reader[0].ToString() + " " + reader[1].ToString());
-            //    appointmentCustomerComboBox.Items.Insert((int)reader[0], reader.GetString("customerName"));
-            //}
-            //reader.Close();
             DataInterface.DBClose();
         }
 
@@ -74,13 +63,8 @@ namespace SchedulingApp
             location = appointmentLocationTextBox.Text;
             contact = appointmentContactTextBox.Text;
             url = appointmentURLTextBox.Text;
-            startDateTime = appointmentStartDate.Value.ToUniversalTime();
-            endDateTime = appointmentEndDate.Value.ToUniversalTime();
-            string start = startDateTime.ToString("u");
-            string end = endDateTime.ToString("u");
-            // Parse endDateTime
-            //date = appointmentEndDate.Value.ToString("yyyy-mm-dd");
-            //time = appointmentEndTime.Value.ToString("HH:MM:ss");
+            start = appointmentStartDate.Value.ToUniversalTime().ToString("u");
+            end = appointmentEndDate.Value.ToUniversalTime().ToString("u");
 
             DataInterface.createAppointment(customerID, title, description, location, contact, url, start, end, currentUser);
             MainForm.addAppointmentForm = this;

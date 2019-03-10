@@ -21,30 +21,45 @@ namespace SchedulingApp
         private static DateTime currentTime = DateTime.Now;
         private static string offset = currentTimeZone.GetUtcOffset(currentTime).ToString();
         private static Dictionary<string, object> appointment = new Dictionary<string, object>();
+        public static string currentTZ;
         
-
         public MainForm()
         {
             InitializeComponent();
-            try
-            {
-                DataInterface.createAppointmentTable();
-            }
-            catch (System.Data.DuplicateNameException)
-            {
-                Console.WriteLine("Appointment Table already created");
-            }
-            
-            DataInterface.displayAppointments(appointmentsDGV);
         }
 
-        
-
-        private DateTime convertToLocal(string time)
+        public void displayAppointments()
         {
-            DateTime utcDateTime = DateTime.Parse(time);
-            DateTime localDateTime = utcDateTime.ToLocalTime();
-            return localDateTime;
+            String query = "";
+            currentTZ = TimeZoneInfo.Local.BaseUtcOffset.ToString();
+            DateTime selectedDate = appointmentCalendar.SelectionRange.Start.ToUniversalTime();
+            DateTime sunday = selectedDate.AddDays(-(int)selectedDate.DayOfWeek).ToUniversalTime();
+            DateTime saturday = selectedDate.AddDays(-(int)selectedDate.DayOfWeek + (int)DayOfWeek.Saturday).ToUniversalTime();
+            DataTable appointmentsDT = new DataTable();
+            if (dgvViewMonthRadioButton.Checked)
+            {
+                query = $"SELECT a.appointmentId AS ID, c.customerName AS 'Customer Name', a.title AS Title, a.start AS Start, a.end AS End FROM appointment AS a, customer AS c WHERE c.customerId = a.customerId AND MONTH(a.start) = '{appointmentCalendar.SelectionStart.Month}' AND YEAR(a.start) = '{appointmentCalendar.SelectionStart.Year}'";
+            }
+            else if (dgvViewWeekRadioButton.Checked)
+            {
+                query = $"SELECT a.appointmentId AS ID, c.customerName AS 'Customer Name', a.title AS Title, a.start AS Start, a.end AS End FROM appointment AS a, customer AS c WHERE c.customerId = a.customerId AND a.start >= '{sunday.ToString("yyyy-MM-dd hh:MM:ss")}' - INTERVAL 3 MINUTE AND a.start < '{saturday.AddHours(24).ToString("yyyy-MM-dd hh:MM:ss")}' - INTERVAL 3 MINUTE";
+            }
+            else if (dgvViewDayRadioButton.Checked)
+            {
+                query = $"SELECT a.appointmentId AS ID, c.customerName AS 'Customer Name', a.title AS Title, a.start AS Start, a.end AS End FROM appointment AS a, customer AS c WHERE c.customerId = a.customerId AND a.start >= '{selectedDate.ToString("yyyy-MM-dd hh:MM:ss")}' - INTERVAL 3 MINUTE AND a.start < '{selectedDate.AddHours(24).ToString("yyyy-MM-dd hh:MM:ss")}' - INTERVAL 3 MINUTE";
+            }
+            DataInterface.DBOpen();
+            MySqlDataAdapter adp = new MySqlDataAdapter(query, DataInterface.conn);
+            MySqlCommandBuilder cmd = new MySqlCommandBuilder(adp);
+            adp.Fill(appointmentsDT);
+
+            DataInterface.convertToLocal(appointmentsDT, "Start");
+            DataInterface.convertToLocal(appointmentsDT, "End");
+
+            appointmentsDGV.DataSource = appointmentsDT;
+            appointmentsDGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            DataInterface.DBClose();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -64,11 +79,9 @@ namespace SchedulingApp
 
         private void mainLogoutButton_Click(object sender, EventArgs e)
         {
-            DataInterface.appointmentTable.Clear();
             MainForm mainform = this;
             loginForm.Show();
             this.Hide();
-
         }
 
         private void mainCustomerButton_Click(object sender, EventArgs e)
@@ -90,7 +103,27 @@ namespace SchedulingApp
         private void MainForm_Activated(object sender, EventArgs e)
         {
             appointmentsDGV.Refresh();
-            DataInterface.displayAppointments(appointmentsDGV);
+            displayAppointments();
+        }
+
+        private void dgvViewWeekRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            displayAppointments();
+        }
+
+        private void dgvViewDayRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            displayAppointments();
+        }
+
+        private void dgvViewMonthRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            displayAppointments();
+        }
+
+        private void appointmentCalendar_DateChanged(object sender, DateRangeEventArgs e)
+        {
+            displayAppointments();
         }
     }
 }

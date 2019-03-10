@@ -59,18 +59,23 @@
             // 
             this.appointmentCalendar.FirstDayOfWeek = System.Windows.Forms.Day.Sunday;
             this.appointmentCalendar.Location = new System.Drawing.Point(18, 53);
+            this.appointmentCalendar.MaxSelectionCount = 1;
             this.appointmentCalendar.Name = "appointmentCalendar";
             this.appointmentCalendar.TabIndex = 1;
+            this.appointmentCalendar.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.appointmentCalendar_DateChanged);
             // 
             // appointmentsDGV
             // 
             this.appointmentsDGV.AllowUserToAddRows = false;
             this.appointmentsDGV.AllowUserToDeleteRows = false;
             this.appointmentsDGV.AllowUserToOrderColumns = true;
+            this.appointmentsDGV.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.appointmentsDGV.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.appointmentsDGV.Location = new System.Drawing.Point(268, 82);
             this.appointmentsDGV.Name = "appointmentsDGV";
+            this.appointmentsDGV.ReadOnly = true;
             this.appointmentsDGV.RowHeadersVisible = false;
+            this.appointmentsDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.appointmentsDGV.Size = new System.Drawing.Size(460, 244);
             this.appointmentsDGV.TabIndex = 2;
             // 
@@ -81,9 +86,9 @@
             this.dgvViewMonthRadioButton.Name = "dgvViewMonthRadioButton";
             this.dgvViewMonthRadioButton.Size = new System.Drawing.Size(55, 17);
             this.dgvViewMonthRadioButton.TabIndex = 3;
-            this.dgvViewMonthRadioButton.TabStop = true;
             this.dgvViewMonthRadioButton.Text = "Month";
             this.dgvViewMonthRadioButton.UseVisualStyleBackColor = true;
+            this.dgvViewMonthRadioButton.CheckedChanged += new System.EventHandler(this.dgvViewMonthRadioButton_CheckedChanged);
             // 
             // dgvViewWeekRadioButton
             // 
@@ -92,13 +97,14 @@
             this.dgvViewWeekRadioButton.Name = "dgvViewWeekRadioButton";
             this.dgvViewWeekRadioButton.Size = new System.Drawing.Size(54, 17);
             this.dgvViewWeekRadioButton.TabIndex = 4;
-            this.dgvViewWeekRadioButton.TabStop = true;
             this.dgvViewWeekRadioButton.Text = "Week";
             this.dgvViewWeekRadioButton.UseVisualStyleBackColor = true;
+            this.dgvViewWeekRadioButton.CheckedChanged += new System.EventHandler(this.dgvViewWeekRadioButton_CheckedChanged);
             // 
             // dgvViewDayRadioButton
             // 
             this.dgvViewDayRadioButton.AutoSize = true;
+            this.dgvViewDayRadioButton.Checked = true;
             this.dgvViewDayRadioButton.Location = new System.Drawing.Point(186, 19);
             this.dgvViewDayRadioButton.Name = "dgvViewDayRadioButton";
             this.dgvViewDayRadioButton.Size = new System.Drawing.Size(44, 17);
@@ -106,6 +112,7 @@
             this.dgvViewDayRadioButton.TabStop = true;
             this.dgvViewDayRadioButton.Text = "Day";
             this.dgvViewDayRadioButton.UseVisualStyleBackColor = true;
+            this.dgvViewDayRadioButton.CheckedChanged += new System.EventHandler(this.dgvViewDayRadioButton_CheckedChanged);
             // 
             // dgvViewGroupBox
             // 
@@ -210,7 +217,6 @@
 
         private System.Windows.Forms.Label mainWelcomeLabel;
         private System.Windows.Forms.MonthCalendar appointmentCalendar;
-        private System.Windows.Forms.DataGridView appointmentsDGV;
         private System.Windows.Forms.RadioButton dgvViewMonthRadioButton;
         private System.Windows.Forms.RadioButton dgvViewWeekRadioButton;
         private System.Windows.Forms.RadioButton dgvViewDayRadioButton;
@@ -221,5 +227,6 @@
         private System.Windows.Forms.Button mainDeleteButton;
         private System.Windows.Forms.Button mainLogoutButton;
         private System.Windows.Forms.Button mainCustomerButton;
+        protected System.Windows.Forms.DataGridView appointmentsDGV;
     }
 }

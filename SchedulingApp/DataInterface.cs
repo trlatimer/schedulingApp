@@ -25,10 +25,6 @@ namespace SchedulingApp
         public static MySqlConnection conn = new MySqlConnection(connectionString);
         public static MySqlCommand cmd;
         public static MySqlDataReader reader;
-        public static DataTable appointmentTable = new DataTable("Appointments");
-        public static DataColumn dtColumn;
-        public static DataRow dtRow;
-        public static DataSet dtSet;
 
         public static int getCurrentUserID()
         {
@@ -120,72 +116,15 @@ namespace SchedulingApp
             DGV.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
-        public static void createAppointmentTable()
+        public static void convertToLocal(DataTable table, string columnName)
         {
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(Int32);
-            dtColumn.ColumnName = "ID";
-            appointmentTable.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "Customer";
-            appointmentTable.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "Title";
-            appointmentTable.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "Start";
-            appointmentTable.Columns.Add(dtColumn);
-
-            dtColumn = new DataColumn();
-            dtColumn.DataType = typeof(string);
-            dtColumn.ColumnName = "End";
-            appointmentTable.Columns.Add(dtColumn);
-
-            DataColumn[] PrimaryKeyColumns = new DataColumn[1];
-            PrimaryKeyColumns[0] = appointmentTable.Columns["ID"];
-            appointmentTable.PrimaryKey = PrimaryKeyColumns;
-
-            dtSet = new DataSet();
-            dtSet.Tables.Add(appointmentTable);
-        }
-
-        public static void displayAppointments(DataGridView dgv)
-        {
-            DBOpen();
-            // Fix CONVERT_TZ(start, '+00:00', '{offset}') AS 'Start Time'    WHERE a.createBy = '{currentUserName}'
-            String query = $"SELECT a.appointmentId, c.customerName, a.title, a.start, a.end FROM appointment AS a, customer AS c WHERE c.customerId = a.customerId";
-            //DataInterface.displayDGV(query, appointmentsDGV);
-            DBOpen();
-            MySqlCommand cmd = new MySqlCommand(query, conn);
-            MySqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
+            foreach (DataRow row in table.Rows)
             {
-                dtRow = appointmentTable.NewRow();
-                dtRow["ID"] = Convert.ToInt32(reader[0]);
-                dtRow["Customer"] = reader[1].ToString();
-                dtRow["Title"] = reader[2].ToString();
-                dtRow["Start"] = convertToLocal(reader[3].ToString());
-                dtRow["End"] = convertToLocal(reader[4].ToString());
-
+                TimeZoneInfo currentZone = TimeZoneInfo.Local;
+                DateTime returnedDateTime = row.Field<DateTime>(columnName);
+                DateTime localDateTime = TimeZoneInfo.ConvertTimeFromUtc(returnedDateTime, currentZone);
+                row.SetField(columnName, localDateTime);
             }
-            reader.Close();
-            BindingSource bindingSource = new BindingSource();
-            bindingSource.DataSource = dtSet.Tables["Customers"];
-            dgv.DataSource = bindingSource;
-            DBClose();
-        }
-
-        public static string convertToLocal(string time)
-        {
-            DateTime utcDateTime = DateTime.Parse(time);
-            DateTime localDateTime = utcDateTime.ToLocalTime();
-            return localDateTime.ToString("MM/dd/yyyy hh:mm tt");
         }
 
         // Build Dictionary object for customer
@@ -526,7 +465,6 @@ namespace SchedulingApp
             // Create customers
             createCustomer("John Doe", "1111 Some St", "New York, New York", "United States", "10001", "111-111-1111", true, "ADMIN");
             createCustomer("Jane Doe", "1112 Some St", "New York, New York", "United States", "10001", "111-111-1112", true, "ADMIN");
-            createAppointment(2, "Interview", "Interview for software developer position", "RM 201", "Jane Doe", "testUrl", $"{getCurrentDateTime()}" , $"{getCurrentDateTime()}", "ADMIN");
 
             DBClose();
         }

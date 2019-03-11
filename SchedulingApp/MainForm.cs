@@ -17,11 +17,9 @@ namespace SchedulingApp
         public static LoginForm loginForm = null;
         public static CustomerMainForm customerForm = null;
         public static AddAppointmentForm addAppointmentForm = null;
-        private static TimeZone currentTimeZone = TimeZone.CurrentTimeZone;
-        private static DateTime currentTime = DateTime.Now;
-        private static string offset = currentTimeZone.GetUtcOffset(currentTime).ToString();
-        private static Dictionary<string, object> appointment = new Dictionary<string, object>();
-        public static string currentTZ;
+        public static UpdateAppointmentForm updateAppointmentForm = null;
+        public static int selectedAppointmentID = -1;
+        public static DataGridViewRow selectedRow;
         
         public MainForm()
         {
@@ -31,22 +29,21 @@ namespace SchedulingApp
         public void displayAppointments()
         {
             String query = "";
-            currentTZ = TimeZoneInfo.Local.BaseUtcOffset.ToString();
             DateTime selectedDate = appointmentCalendar.SelectionRange.Start.ToUniversalTime();
             DateTime sunday = selectedDate.AddDays(-(int)selectedDate.DayOfWeek).ToUniversalTime();
             DateTime saturday = selectedDate.AddDays(-(int)selectedDate.DayOfWeek + (int)DayOfWeek.Saturday).ToUniversalTime();
             DataTable appointmentsDT = new DataTable();
             if (dgvViewMonthRadioButton.Checked)
             {
-                query = $"SELECT a.appointmentId AS ID, c.customerName AS 'Customer Name', a.title AS Title, a.start AS Start, a.end AS End FROM appointment AS a, customer AS c WHERE c.customerId = a.customerId AND MONTH(a.start) = '{appointmentCalendar.SelectionStart.Month}' AND YEAR(a.start) = '{appointmentCalendar.SelectionStart.Year}'";
+                query = $"SELECT a.appointmentId AS ID, c.customerName AS 'Customer Name', a.title AS Title, a.start AS Start, a.end AS End FROM appointment AS a, customer AS c WHERE c.customerId = a.customerId AND MONTH(a.start) = '{appointmentCalendar.SelectionStart.Month}' AND YEAR(a.start) = '{appointmentCalendar.SelectionStart.Year}' AND a.createdBy = '{DataInterface.getCurrentUserName()}' ORDER BY a.start";
             }
             else if (dgvViewWeekRadioButton.Checked)
             {
-                query = $"SELECT a.appointmentId AS ID, c.customerName AS 'Customer Name', a.title AS Title, a.start AS Start, a.end AS End FROM appointment AS a, customer AS c WHERE c.customerId = a.customerId AND a.start >= '{sunday.ToString("yyyy-MM-dd hh:MM:ss")}' - INTERVAL 3 MINUTE AND a.start < '{saturday.AddHours(24).ToString("yyyy-MM-dd hh:MM:ss")}' - INTERVAL 3 MINUTE";
+                query = $"SELECT a.appointmentId AS ID, c.customerName AS 'Customer Name', a.title AS Title, a.start AS Start, a.end AS End FROM appointment AS a, customer AS c WHERE c.customerId = a.customerId AND a.start >= '{sunday.ToString("yyyy-MM-dd hh:MM:ss")}' - INTERVAL 3 MINUTE AND a.start < '{saturday.AddHours(24).ToString("yyyy-MM-dd hh:MM:ss")}' - INTERVAL 3 MINUTE AND a.createdBy = '{DataInterface.getCurrentUserName()}' ORDER BY a.start";
             }
             else if (dgvViewDayRadioButton.Checked)
             {
-                query = $"SELECT a.appointmentId AS ID, c.customerName AS 'Customer Name', a.title AS Title, a.start AS Start, a.end AS End FROM appointment AS a, customer AS c WHERE c.customerId = a.customerId AND a.start >= '{selectedDate.ToString("yyyy-MM-dd hh:MM:ss")}' - INTERVAL 3 MINUTE AND a.start < '{selectedDate.AddHours(24).ToString("yyyy-MM-dd hh:MM:ss")}' - INTERVAL 3 MINUTE";
+                query = $"SELECT a.appointmentId AS ID, c.customerName AS 'Customer Name', a.title AS Title, a.start AS Start, a.end AS End FROM appointment AS a, customer AS c WHERE c.customerId = a.customerId AND a.start >= '{selectedDate.ToString("yyyy-MM-dd hh:MM:ss")}' - INTERVAL 3 MINUTE AND a.start < '{selectedDate.AddHours(24).ToString("yyyy-MM-dd hh:MM:ss")}' - INTERVAL 3 MINUTE AND a.createdBy = '{DataInterface.getCurrentUserName()}' ORDER BY a.start";
             }
             DataInterface.DBOpen();
             MySqlDataAdapter adp = new MySqlDataAdapter(query, DataInterface.conn);
@@ -124,6 +121,60 @@ namespace SchedulingApp
         private void appointmentCalendar_DateChanged(object sender, DateRangeEventArgs e)
         {
             displayAppointments();
+        }
+
+        private void mainEditButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DataInterface.DBClose();
+                updateAppointmentForm = new UpdateAppointmentForm();
+                UpdateAppointmentForm.mainForm = this;
+                updateAppointmentForm.Show();
+            }
+            catch (DataNotFoundException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
+        }
+
+        private void appointmentsDGV_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int rowIndex = appointmentsDGV.CurrentCell.RowIndex;
+            selectedRow = appointmentsDGV.Rows[rowIndex];
+            selectedAppointmentID = Convert.ToInt32(selectedRow.Cells[0].Value);
+            Console.WriteLine("Appointment ID: " + selectedAppointmentID);
+        }
+
+        private void mainDeleteButton_Click(object sender, EventArgs e)
+        {
+            if (selectedAppointmentID != -1)
+            {
+                DataInterface.deleteAppoinment(selectedAppointmentID);
+            }
+            else
+            {
+                MessageBox.Show("Please select a customer to delete and try again.");
+            }
+            displayAppointments();
+        }
+    }
+
+    public class DataNotFoundException : Exception
+    {
+        public DataNotFoundException()
+        {
+        }
+
+        public DataNotFoundException(string message)
+            : base(message)
+        {
+        }
+
+        public DataNotFoundException(string message, Exception inner)
+            : base(message, inner)
+        {
         }
     }
 }

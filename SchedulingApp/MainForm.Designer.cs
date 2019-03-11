@@ -78,6 +78,7 @@
             this.appointmentsDGV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.appointmentsDGV.Size = new System.Drawing.Size(460, 244);
             this.appointmentsDGV.TabIndex = 2;
+            this.appointmentsDGV.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.appointmentsDGV_CellClick);
             // 
             // dgvViewMonthRadioButton
             // 
@@ -154,6 +155,7 @@
             this.mainEditButton.TabIndex = 12;
             this.mainEditButton.Text = "Edit";
             this.mainEditButton.UseVisualStyleBackColor = true;
+            this.mainEditButton.Click += new System.EventHandler(this.mainEditButton_Click);
             // 
             // mainDeleteButton
             // 
@@ -163,6 +165,7 @@
             this.mainDeleteButton.TabIndex = 13;
             this.mainDeleteButton.Text = "Delete";
             this.mainDeleteButton.UseVisualStyleBackColor = true;
+            this.mainDeleteButton.Click += new System.EventHandler(this.mainDeleteButton_Click);
             // 
             // mainLogoutButton
             // 

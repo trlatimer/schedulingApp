@@ -116,6 +116,19 @@ namespace SchedulingApp
             DGV.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
+        public static void populateComboBox(ComboBox comboBox)
+        {
+            String query = "SELECT customerId, customerName FROM customer";
+            DBOpen();
+            MySqlDataAdapter adp = new MySqlDataAdapter(query, conn);
+            DataTable dt = new DataTable("Customer");
+            adp.Fill(dt);
+            comboBox.DataSource = dt;
+            comboBox.DisplayMember = "customerName";
+            comboBox.ValueMember = "customerId";
+            DBClose();
+        }
+
         public static void convertToLocal(DataTable table, string columnName)
         {
             foreach (DataRow row in table.Rows)
@@ -132,8 +145,6 @@ namespace SchedulingApp
         {
             Dictionary<string, object> Customer = new Dictionary<string, object>();
             string addressID;
-
-
 
             // Retrieve details from customer table that match customerID
             string query = $"SELECT * FROM customer WHERE customerId = '{customerID.ToString()}'";
@@ -436,6 +447,60 @@ namespace SchedulingApp
             cmd = new MySqlCommand(sqlString, conn);
             cmd.ExecuteNonQuery();
             DBClose();
+        }
+
+        public static void updateAppointment(int appointmentId, int customerId, string title, string description, string location, string contact, string url, string startTime, string endTime)
+        {
+            string currentDateTime = getCurrentDateTime();
+            String sqlString = $"UPDATE appointment SET customerId = '{customerId}', title = '{title}', description = '{description}', location = '{location}', contact = '{contact}', url = '{url}', start = '{startTime}', end = '{endTime}', lastUpdateBy = '{getCurrentUserName()}' WHERE appointmentId = '{appointmentId}'";
+
+            // Establish and open database connection
+            DBOpen();
+            cmd = new MySqlCommand(sqlString, conn);
+            cmd.ExecuteNonQuery();
+            DBClose();
+        }
+
+        public static void deleteAppoinment(int appointmentID)
+        {
+            DBOpen();
+            String query = $"DELETE FROM appointment WHERE appointmentId = '{appointmentID}'";
+            cmd = new MySqlCommand(query, conn);
+            cmd.ExecuteNonQuery();
+            DBClose();
+        }
+
+        public static Dictionary<string, string> getAppointmentInfo(int appointmentID)
+        {
+            Dictionary<string, string> Appointment = new Dictionary<string, string>();
+
+            // Retrieve details from customer table that match customerID
+            string query = $"SELECT * FROM appointment WHERE appointmentId = '{appointmentID.ToString()}'";
+            DBOpen();
+            cmd = new MySqlCommand(query, conn);
+            reader = cmd.ExecuteReader();
+            reader.Read();
+            if (reader.HasRows)
+            {
+                // Build customer dictionary object from customer table
+                Appointment.Add("ID", reader[0].ToString());
+                Appointment.Add("customerID", reader[1].ToString());
+                Appointment.Add("Title", reader[2].ToString());
+                Appointment.Add("Description", reader[3].ToString());
+                Appointment.Add("Location", reader[4].ToString());
+                Appointment.Add("Contact", reader[5].ToString());
+                Appointment.Add("URL", reader[6].ToString());
+                Appointment.Add("Start", reader[7].ToString());
+                Appointment.Add("End", reader[8].ToString());
+            }
+            else
+            {
+                throw new DataNotFoundException("Unable to obtain appointment information. Please select an appointment and try again.");
+            }
+            reader.Close();
+            DBClose();
+
+            return Appointment;
         }
 
         public static void generatePsuedoData()

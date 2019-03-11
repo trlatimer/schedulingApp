@@ -7,14 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
-using System.Globalization;
 
 namespace SchedulingApp
 {
-    public partial class AddAppointmentForm : SchedulingAppBaseForms.AppointmentForm
+    public partial class UpdateAppointmentForm : SchedulingAppBaseForms.AppointmentForm
     {
         public static MainForm mainForm = null;
+        private Dictionary<string, string> selectedAppointment;
         private int appointmentID;
         private int customerID;
         private string title;
@@ -24,26 +23,42 @@ namespace SchedulingApp
         private string url;
         private string start;
         private string end;
-        private string currentUser = DataInterface.getCurrentUserName();
         private int selectedCustomerID;
 
-        public AddAppointmentForm()
+        public UpdateAppointmentForm()
         {
             InitializeComponent();
+            populateData();
+        }
+
+        private void populateData()
+        {
+            selectedAppointment = DataInterface.getAppointmentInfo(MainForm.selectedAppointmentID);
+
             DataInterface.populateComboBox(appointmentCustomerComboBox);
+
+            appointmentIDTextBox.Text = selectedAppointment["ID"];
+            appointmentCustomerComboBox.SelectedValue = Convert.ToInt32(selectedAppointment["customerID"]);
+            appointmentTitleTextBox.Text = selectedAppointment["Title"];
+            appointmentLocationTextBox.Text = selectedAppointment["Location"];
+            appointmentContactTextBox.Text = selectedAppointment["Contact"];
+            appointmentURLTextBox.Text = selectedAppointment["URL"];
+            appointmentStartDate.Value = DateTime.Parse(selectedAppointment["Start"]);
+            appointmentEndDate.Value = DateTime.Parse(selectedAppointment["End"]);
+            appointmentDescriptionTextBox.Text = selectedAppointment["Description"];
         }
 
         private void appointmentCancelButton_Click(object sender, EventArgs e)
         {
             DataInterface.DBClose();
-            MainForm.addAppointmentForm = this;
+            MainForm.updateAppointmentForm = this;
             mainForm.Show();
-            MainForm.addAppointmentForm.Close();
+            MainForm.updateAppointmentForm.Close();
         }
 
         private void appointmentSaveButton_Click(object sender, EventArgs e)
         {
-            appointmentID = DataInterface.getNextID("appointmentId", "appointment", DataInterface.getAppointmentIDList());
+            appointmentID = MainForm.selectedAppointmentID;
             customerID = selectedCustomerID;
             title = appointmentTitleTextBox.Text;
             description = appointmentDescriptionTextBox.Text;
@@ -53,11 +68,10 @@ namespace SchedulingApp
             start = appointmentStartDate.Value.ToUniversalTime().ToString("u");
             end = appointmentEndDate.Value.ToUniversalTime().ToString("u");
 
-            DataInterface.createAppointment(customerID, title, description, location, contact, url, start, end, currentUser);
-            MainForm.addAppointmentForm = this;
+            DataInterface.updateAppointment(appointmentID, customerID, title, description, location, contact, url, start, end);
+            MainForm.updateAppointmentForm = this;
             mainForm.Show();
-            MainForm.addAppointmentForm.Close();
-
+            MainForm.updateAppointmentForm.Close();
         }
 
         private void appointmentCustomerComboBox_SelectedIndexChanged(object sender, EventArgs e)

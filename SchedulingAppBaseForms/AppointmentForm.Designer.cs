@@ -110,7 +110,7 @@
             this.appointmentStartDate.Location = new System.Drawing.Point(187, 228);
             this.appointmentStartDate.Name = "appointmentStartDate";
             this.appointmentStartDate.Size = new System.Drawing.Size(175, 22);
-            this.appointmentStartDate.TabIndex = 4;
+            this.appointmentStartDate.TabIndex = 5;
             // 
             // appointmentStartLabel
             // 
@@ -136,7 +136,7 @@
             this.appointmentEndDate.Location = new System.Drawing.Point(187, 255);
             this.appointmentEndDate.Name = "appointmentEndDate";
             this.appointmentEndDate.Size = new System.Drawing.Size(175, 22);
-            this.appointmentEndDate.TabIndex = 5;
+            this.appointmentEndDate.TabIndex = 6;
             // 
             // appointmentIDTextBox
             // 
@@ -162,7 +162,7 @@
             this.appointmentDescriptionTextBox.Multiline = true;
             this.appointmentDescriptionTextBox.Name = "appointmentDescriptionTextBox";
             this.appointmentDescriptionTextBox.Size = new System.Drawing.Size(354, 104);
-            this.appointmentDescriptionTextBox.TabIndex = 6;
+            this.appointmentDescriptionTextBox.TabIndex = 7;
             // 
             // appointmentLocationTextBox
             // 
@@ -176,7 +176,7 @@
             this.appointmentURLTextBox.Location = new System.Drawing.Point(187, 201);
             this.appointmentURLTextBox.Name = "appointmentURLTextBox";
             this.appointmentURLTextBox.Size = new System.Drawing.Size(175, 22);
-            this.appointmentURLTextBox.TabIndex = 3;
+            this.appointmentURLTextBox.TabIndex = 4;
             // 
             // appointmentCustomerComboBox
             // 
@@ -191,7 +191,7 @@
             this.appointmentCancelButton.Location = new System.Drawing.Point(72, 431);
             this.appointmentCancelButton.Name = "appointmentCancelButton";
             this.appointmentCancelButton.Size = new System.Drawing.Size(75, 23);
-            this.appointmentCancelButton.TabIndex = 7;
+            this.appointmentCancelButton.TabIndex = 8;
             this.appointmentCancelButton.Text = "Cancel";
             this.appointmentCancelButton.UseVisualStyleBackColor = true;
             // 
@@ -200,7 +200,7 @@
             this.appointmentSaveButton.Location = new System.Drawing.Point(304, 431);
             this.appointmentSaveButton.Name = "appointmentSaveButton";
             this.appointmentSaveButton.Size = new System.Drawing.Size(75, 23);
-            this.appointmentSaveButton.TabIndex = 8;
+            this.appointmentSaveButton.TabIndex = 9;
             this.appointmentSaveButton.Text = "Save";
             this.appointmentSaveButton.UseVisualStyleBackColor = true;
             // 
@@ -218,7 +218,7 @@
             this.appointmentContactTextBox.Location = new System.Drawing.Point(187, 174);
             this.appointmentContactTextBox.Name = "appointmentContactTextBox";
             this.appointmentContactTextBox.Size = new System.Drawing.Size(142, 22);
-            this.appointmentContactTextBox.TabIndex = 14;
+            this.appointmentContactTextBox.TabIndex = 3;
             // 
             // AppointmentForm
             // 

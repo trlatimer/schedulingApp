@@ -20,19 +20,22 @@ namespace SchedulingApp
         public static UpdateAppointmentForm updateAppointmentForm = null;
         public static int selectedAppointmentID = -1;
         public static DataGridViewRow selectedRow;
+        public static DataTable appointmentsDT = new DataTable();
         
         public MainForm()
         {
             InitializeComponent();
+            displayAppointments();
+            checkForReminders();
         }
 
         public void displayAppointments()
         {
+            appointmentsDT.Clear();
             String query = "";
             DateTime selectedDate = appointmentCalendar.SelectionRange.Start.ToUniversalTime();
             DateTime sunday = selectedDate.AddDays(-(int)selectedDate.DayOfWeek).ToUniversalTime();
             DateTime saturday = selectedDate.AddDays(-(int)selectedDate.DayOfWeek + (int)DayOfWeek.Saturday).ToUniversalTime();
-            DataTable appointmentsDT = new DataTable();
             if (dgvViewMonthRadioButton.Checked)
             {
                 query = $"SELECT a.appointmentId AS ID, c.customerName AS 'Customer Name', a.title AS Title, a.start AS Start, a.end AS End FROM appointment AS a, customer AS c WHERE c.customerId = a.customerId AND MONTH(a.start) = '{appointmentCalendar.SelectionStart.Month}' AND YEAR(a.start) = '{appointmentCalendar.SelectionStart.Year}' AND a.createdBy = '{DataInterface.getCurrentUserName()}' ORDER BY a.start";
@@ -57,6 +60,22 @@ namespace SchedulingApp
             appointmentsDGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
             DataInterface.DBClose();
+        }
+
+        public static void checkForReminders()
+        {
+            foreach(DataRow row in appointmentsDT.Rows)
+            {
+                DateTime startTime = DateTime.Parse(row["Start"].ToString());
+                DateTime currentTime = DateTime.Parse(DataInterface.getCurrentDateTime());
+                TimeSpan reminderMark = new TimeSpan(0, 15, 0);
+                TimeSpan appointmentPassed = new TimeSpan(0, 0, 0);
+                TimeSpan difference = startTime.Subtract(currentTime);
+                if (difference <= reminderMark && difference > appointmentPassed)
+                {
+                    MessageBox.Show($"The event, {row["Title"].ToString()}, with customer, {row["Customer Name"].ToString()}, is starting soon.");
+                }
+            }
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -144,7 +163,6 @@ namespace SchedulingApp
             int rowIndex = appointmentsDGV.CurrentCell.RowIndex;
             selectedRow = appointmentsDGV.Rows[rowIndex];
             selectedAppointmentID = Convert.ToInt32(selectedRow.Cells[0].Value);
-            Console.WriteLine("Appointment ID: " + selectedAppointmentID);
         }
 
         private void mainDeleteButton_Click(object sender, EventArgs e)

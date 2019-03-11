@@ -57,7 +57,6 @@ namespace SchedulingApp
             MainForm.addAppointmentForm = this;
             mainForm.Show();
             MainForm.addAppointmentForm.Close();
-
         }
 
         private void appointmentCustomerComboBox_SelectedIndexChanged(object sender, EventArgs e)

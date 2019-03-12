@@ -14,7 +14,7 @@ namespace SchedulingApp
 {
     public partial class MainForm : Form
     {
-        // TODO Check for appointments outside of business hours
+        // TODO
         // Check for overlapping appointments
         // Create 2 lambdas
         // Implement reports

@@ -470,6 +470,18 @@ namespace SchedulingApp
             DBClose();
         }
 
+        public static DataTable getAppointments(string userName)
+        {
+            DataTable appointments = new DataTable();
+            String query = $"SELECT start, end FROM appointment WHERE createdBy = '{userName}'";
+            DBOpen();
+            MySqlDataAdapter adp = new MySqlDataAdapter(query, conn);
+            MySqlCommandBuilder cmd = new MySqlCommandBuilder(adp);
+            adp.Fill(appointments);
+
+            return appointments;
+        }
+
         public static Dictionary<string, string> getAppointmentInfo(int appointmentID)
         {
             Dictionary<string, string> Appointment = new Dictionary<string, string>();

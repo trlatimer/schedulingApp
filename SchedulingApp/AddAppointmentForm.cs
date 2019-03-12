@@ -89,7 +89,23 @@ namespace SchedulingApp
             {
                 return true;
             }
+        }
 
+        public static bool checkForOverlap(DateTime start, DateTime end)
+        {
+            bool overlap = false;
+            DataTable appointments = DataInterface.getAppointments(DataInterface.getCurrentUserName());
+            foreach (DataRow row in appointments.Rows)
+            {
+                DateTime appointmentStart = DateTime.Parse(row["start"].ToString()).ToLocalTime();
+                DateTime appointmentEnd = DateTime.Parse(row["end"].ToString()).ToLocalTime();
+
+                if ((start <= appointmentEnd && start >= appointmentStart) || (end <= appointmentEnd && end >= appointmentStart))
+                { 
+                    overlap = true;
+                }
+            }
+            return overlap;
         }
 
         private void appointmentCancelButton_Click(object sender, EventArgs e)
@@ -116,21 +132,22 @@ namespace SchedulingApp
                     start = appointmentStartDate.Value.ToUniversalTime().ToString("u");
                     end = appointmentEndDate.Value.ToUniversalTime().ToString("u");
 
-                    DataInterface.createAppointment(customerID, title, description, location, contact, url, start, end, currentUser);
-                    MainForm.addAppointmentForm = this;
-                    mainForm.Show();
-                    MainForm.addAppointmentForm.Close();
-                }
-                else
-                {
-                    return;
+                    if (checkForOverlap(DateTime.Parse(start), DateTime.Parse(end)) == true)
+                    {
+                        MessageBox.Show("The appointment you are trying to add overlaps an existing appointment." +
+                            "\n\nPlease correct and try again.");
+                        return;
+                    }
+                    else
+                    {
+                        DataInterface.createAppointment(customerID, title, description, location, contact, url, start, end, currentUser);
+                        MainForm.addAppointmentForm = this;
+                        mainForm.Show();
+                        MainForm.addAppointmentForm.Close();
+                    }
                 }
             }
-            else
-            {
-                return;
-            }
-            
+            return;
         }
 
         private void appointmentCustomerComboBox_SelectedIndexChanged(object sender, EventArgs e)

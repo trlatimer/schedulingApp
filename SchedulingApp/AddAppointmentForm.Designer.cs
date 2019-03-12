@@ -30,6 +30,14 @@
         {
             this.SuspendLayout();
             // 
+            // appointmentTitleTextBox
+            // 
+            this.appointmentTitleTextBox.TextChanged += new System.EventHandler(this.appointmentTitleTextBox_TextChanged);
+            // 
+            // appointmentDescriptionTextBox
+            // 
+            this.appointmentDescriptionTextBox.TextChanged += new System.EventHandler(this.appointmentDescriptionTextBox_TextChanged);
+            // 
             // appointmentCustomerComboBox
             // 
             this.appointmentCustomerComboBox.Size = new System.Drawing.Size(142, 24);

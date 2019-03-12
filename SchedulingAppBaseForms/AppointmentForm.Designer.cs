@@ -144,6 +144,7 @@
             this.appointmentIDTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.appointmentIDTextBox.Location = new System.Drawing.Point(187, 61);
             this.appointmentIDTextBox.Name = "appointmentIDTextBox";
+            this.appointmentIDTextBox.ReadOnly = true;
             this.appointmentIDTextBox.Size = new System.Drawing.Size(142, 22);
             this.appointmentIDTextBox.TabIndex = 10;
             this.appointmentIDTextBox.Text = "-- Auto-Implemented--";

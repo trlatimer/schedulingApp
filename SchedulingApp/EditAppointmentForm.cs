@@ -7,14 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
-using System.Globalization;
 
 namespace SchedulingApp
 {
-    public partial class AddAppointmentForm : SchedulingAppBaseForms.AppointmentForm
+    public partial class EditAppointmentForm : SchedulingAppBaseForms.AppointmentForm
     {
         public static MainForm mainForm = null;
+        private Dictionary<string, string> selectedAppointment;
         private int appointmentID;
         private int customerID;
         private string title;
@@ -24,13 +23,29 @@ namespace SchedulingApp
         private string url;
         private string start;
         private string end;
-        private string currentUser = DataInterface.getCurrentUserName();
         private int selectedCustomerID;
 
-        public AddAppointmentForm()
+        public EditAppointmentForm()
         {
             InitializeComponent();
+            populateData();
+        }
+
+        private void populateData()
+        {
+            selectedAppointment = DataInterface.getAppointmentInfo(MainForm.selectedAppointmentID);
+
             DataInterface.populateComboBox(appointmentCustomerComboBox);
+
+            appointmentIDTextBox.Text = selectedAppointment["ID"];
+            appointmentCustomerComboBox.SelectedValue = Convert.ToInt32(selectedAppointment["customerID"]);
+            appointmentTitleTextBox.Text = selectedAppointment["Title"];
+            appointmentLocationTextBox.Text = selectedAppointment["Location"];
+            appointmentContactTextBox.Text = selectedAppointment["Contact"];
+            appointmentURLTextBox.Text = selectedAppointment["URL"];
+            appointmentStartDate.Value = DateTime.Parse(selectedAppointment["Start"]);
+            appointmentEndDate.Value = DateTime.Parse(selectedAppointment["End"]);
+            appointmentDescriptionTextBox.Text = selectedAppointment["Description"];
         }
 
         private bool inputValidation()
@@ -68,60 +83,21 @@ namespace SchedulingApp
             return isValid;
         }
 
-        public static bool checkBusinessHours(DateTime start, DateTime end)
-        {
-            DateTime businessStart = DateTime.Today.AddHours(8);
-            DateTime businessEnd = DateTime.Today.AddHours(17);
-            if (start.TimeOfDay < businessStart.TimeOfDay || start.TimeOfDay > businessEnd.TimeOfDay || end.TimeOfDay < businessStart.TimeOfDay || end.TimeOfDay > businessEnd.TimeOfDay)
-            {
-                DialogResult result = MessageBox.Show("The start or end time is outside of business hours. Continue?", "Outside Business Hours", MessageBoxButtons.YesNo);
-                if (result == DialogResult.Yes)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        public static bool checkForOverlap(DateTime start, DateTime end)
-        {
-            bool overlap = false;
-            DataTable appointments = DataInterface.getAppointments(DataInterface.getCurrentUserName());
-            foreach (DataRow row in appointments.Rows)
-            {
-                DateTime appointmentStart = DateTime.Parse(row["start"].ToString()).ToLocalTime();
-                DateTime appointmentEnd = DateTime.Parse(row["end"].ToString()).ToLocalTime();
-
-                if ((start <= appointmentEnd && start >= appointmentStart) || (end <= appointmentEnd && end >= appointmentStart))
-                { 
-                    overlap = true;
-                }
-            }
-            return overlap;
-        }
-
         private void appointmentCancelButton_Click(object sender, EventArgs e)
         {
             DataInterface.DBClose();
-            MainForm.addAppointmentForm = this;
+            MainForm.updateAppointmentForm = this;
             mainForm.Show();
-            MainForm.addAppointmentForm.Close();
+            MainForm.updateAppointmentForm.Close();
         }
 
         private void appointmentSaveButton_Click(object sender, EventArgs e)
         {
             if (inputValidation())
             {
-                if (checkBusinessHours(appointmentStartDate.Value, appointmentEndDate.Value))
+                if (AddAppointmentForm.checkBusinessHours(appointmentStartDate.Value, appointmentEndDate.Value))
                 {
-                    appointmentID = DataInterface.getNextID("appointmentId", "appointment", DataInterface.getAppointmentIDList());
+                    appointmentID = MainForm.selectedAppointmentID;
                     customerID = selectedCustomerID;
                     title = appointmentTitleTextBox.Text;
                     description = appointmentDescriptionTextBox.Text;
@@ -131,7 +107,7 @@ namespace SchedulingApp
                     start = appointmentStartDate.Value.ToUniversalTime().ToString("u");
                     end = appointmentEndDate.Value.ToUniversalTime().ToString("u");
 
-                    if (checkForOverlap(DateTime.Parse(start), DateTime.Parse(end)) == true)
+                    if (AddAppointmentForm.checkForOverlap(DateTime.Parse(start), DateTime.Parse(end)) == true)
                     {
                         MessageBox.Show("The appointment you are trying to add overlaps an existing appointment." +
                             "\n\nPlease correct and try again.");
@@ -139,14 +115,13 @@ namespace SchedulingApp
                     }
                     else
                     {
-                        DataInterface.createAppointment(customerID, title, description, location, contact, url, start, end, currentUser);
-                        MainForm.addAppointmentForm = this;
+                        DataInterface.updateAppointment(appointmentID, customerID, title, description, location, contact, url, start, end);
+                        MainForm.updateAppointmentForm = this;
                         mainForm.Show();
-                        MainForm.addAppointmentForm.Close();
+                        MainForm.updateAppointmentForm.Close();
                     }
                 }
             }
-            return;
         }
 
         private void appointmentCustomerComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -163,7 +138,7 @@ namespace SchedulingApp
 
         private void appointmentDescriptionTextBox_TextChanged(object sender, EventArgs e)
         {
-            AddCustomerForm.checkTextChanged(appointmentTitleTextBox);
+            AddCustomerForm.checkTextChanged(appointmentDescriptionTextBox);
         }
     }
 }

@@ -41,8 +41,15 @@
             this.mainDeleteButton = new System.Windows.Forms.Button();
             this.mainLogoutButton = new System.Windows.Forms.Button();
             this.mainCustomerButton = new System.Windows.Forms.Button();
+            this.appointmentsGroupBox = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.reportsGroupBox = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.appointmentsDGV)).BeginInit();
             this.dgvViewGroupBox.SuspendLayout();
+            this.appointmentsGroupBox.SuspendLayout();
+            this.reportsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainWelcomeLabel
@@ -139,7 +146,7 @@
             // 
             // mainAddButton
             // 
-            this.mainAddButton.Location = new System.Drawing.Point(170, 227);
+            this.mainAddButton.Location = new System.Drawing.Point(6, 20);
             this.mainAddButton.Name = "mainAddButton";
             this.mainAddButton.Size = new System.Drawing.Size(75, 23);
             this.mainAddButton.TabIndex = 11;
@@ -149,7 +156,7 @@
             // 
             // mainEditButton
             // 
-            this.mainEditButton.Location = new System.Drawing.Point(170, 256);
+            this.mainEditButton.Location = new System.Drawing.Point(6, 49);
             this.mainEditButton.Name = "mainEditButton";
             this.mainEditButton.Size = new System.Drawing.Size(75, 23);
             this.mainEditButton.TabIndex = 12;
@@ -159,7 +166,7 @@
             // 
             // mainDeleteButton
             // 
-            this.mainDeleteButton.Location = new System.Drawing.Point(170, 285);
+            this.mainDeleteButton.Location = new System.Drawing.Point(6, 78);
             this.mainDeleteButton.Name = "mainDeleteButton";
             this.mainDeleteButton.Size = new System.Drawing.Size(75, 23);
             this.mainDeleteButton.TabIndex = 13;
@@ -179,7 +186,7 @@
             // 
             // mainCustomerButton
             // 
-            this.mainCustomerButton.Location = new System.Drawing.Point(35, 256);
+            this.mainCustomerButton.Location = new System.Drawing.Point(295, 343);
             this.mainCustomerButton.Name = "mainCustomerButton";
             this.mainCustomerButton.Size = new System.Drawing.Size(99, 23);
             this.mainCustomerButton.TabIndex = 15;
@@ -187,17 +194,67 @@
             this.mainCustomerButton.UseVisualStyleBackColor = true;
             this.mainCustomerButton.Click += new System.EventHandler(this.mainCustomerButton_Click);
             // 
+            // appointmentsGroupBox
+            // 
+            this.appointmentsGroupBox.Controls.Add(this.mainDeleteButton);
+            this.appointmentsGroupBox.Controls.Add(this.mainEditButton);
+            this.appointmentsGroupBox.Controls.Add(this.mainAddButton);
+            this.appointmentsGroupBox.Location = new System.Drawing.Point(142, 227);
+            this.appointmentsGroupBox.Name = "appointmentsGroupBox";
+            this.appointmentsGroupBox.Size = new System.Drawing.Size(90, 108);
+            this.appointmentsGroupBox.TabIndex = 16;
+            this.appointmentsGroupBox.TabStop = false;
+            this.appointmentsGroupBox.Text = "Appointments";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(7, 20);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(81, 23);
+            this.button1.TabIndex = 17;
+            this.button1.Text = "By Month";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(7, 49);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(81, 23);
+            this.button2.TabIndex = 18;
+            this.button2.Text = "By Consultant";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(7, 78);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(81, 23);
+            this.button3.TabIndex = 19;
+            this.button3.Text = "By Customer";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // reportsGroupBox
+            // 
+            this.reportsGroupBox.Controls.Add(this.button3);
+            this.reportsGroupBox.Controls.Add(this.button2);
+            this.reportsGroupBox.Controls.Add(this.button1);
+            this.reportsGroupBox.Location = new System.Drawing.Point(28, 227);
+            this.reportsGroupBox.Name = "reportsGroupBox";
+            this.reportsGroupBox.Size = new System.Drawing.Size(98, 108);
+            this.reportsGroupBox.TabIndex = 20;
+            this.reportsGroupBox.TabStop = false;
+            this.reportsGroupBox.Text = "Reports";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ClientSize = new System.Drawing.Size(761, 385);
+            this.ClientSize = new System.Drawing.Size(761, 378);
+            this.Controls.Add(this.reportsGroupBox);
+            this.Controls.Add(this.appointmentsGroupBox);
             this.Controls.Add(this.mainCustomerButton);
             this.Controls.Add(this.mainLogoutButton);
-            this.Controls.Add(this.mainDeleteButton);
-            this.Controls.Add(this.mainEditButton);
-            this.Controls.Add(this.mainAddButton);
             this.Controls.Add(this.mainExitButton);
             this.Controls.Add(this.dgvViewGroupBox);
             this.Controls.Add(this.appointmentsDGV);
@@ -211,6 +268,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.appointmentsDGV)).EndInit();
             this.dgvViewGroupBox.ResumeLayout(false);
             this.dgvViewGroupBox.PerformLayout();
+            this.appointmentsGroupBox.ResumeLayout(false);
+            this.reportsGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -231,5 +290,10 @@
         private System.Windows.Forms.Button mainLogoutButton;
         private System.Windows.Forms.Button mainCustomerButton;
         protected System.Windows.Forms.DataGridView appointmentsDGV;
+        private System.Windows.Forms.GroupBox appointmentsGroupBox;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.GroupBox reportsGroupBox;
     }
 }

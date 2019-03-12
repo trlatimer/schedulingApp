@@ -1,6 +1,6 @@
 ﻿namespace SchedulingApp
 {
-    partial class UpdateAppointmentForm
+    partial class EditAppointmentForm
     {
         /// <summary>
         /// Required designer variable.
@@ -30,6 +30,14 @@
         {
             this.SuspendLayout();
             // 
+            // appointmentTitleTextBox
+            // 
+            this.appointmentTitleTextBox.TextChanged += new System.EventHandler(this.appointmentTitleTextBox_TextChanged);
+            // 
+            // appointmentDescriptionTextBox
+            // 
+            this.appointmentDescriptionTextBox.TextChanged += new System.EventHandler(this.appointmentDescriptionTextBox_TextChanged);
+            // 
             // appointmentCustomerComboBox
             // 
             this.appointmentCustomerComboBox.Size = new System.Drawing.Size(142, 24);
@@ -43,12 +51,12 @@
             // 
             this.appointmentSaveButton.Click += new System.EventHandler(this.appointmentSaveButton_Click);
             // 
-            // UpdateAppointmentForm
+            // EditAppointmentForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(434, 472);
-            this.Name = "UpdateAppointmentForm";
+            this.Name = "EditAppointmentForm";
             this.Text = "UpdateAppointmentForm";
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -15,14 +15,13 @@ namespace SchedulingApp
     public partial class MainForm : Form
     {
         // TODO
-        // Check for overlapping appointments
         // Create 2 lambdas
         // Implement reports
 
         public static LoginForm loginForm = null;
         public static CustomerMainForm customerForm = null;
         public static AddAppointmentForm addAppointmentForm = null;
-        public static UpdateAppointmentForm updateAppointmentForm = null;
+        public static EditAppointmentForm updateAppointmentForm = null;
         public static int selectedAppointmentID = -1;
         public static DataGridViewRow selectedRow;
         public static DataTable appointmentsDT = new DataTable();
@@ -152,8 +151,8 @@ namespace SchedulingApp
             try
             {
                 DataInterface.DBClose();
-                updateAppointmentForm = new UpdateAppointmentForm();
-                UpdateAppointmentForm.mainForm = this;
+                updateAppointmentForm = new EditAppointmentForm();
+                EditAppointmentForm.mainForm = this;
                 updateAppointmentForm.Show();
             }
             catch (DataNotFoundException ex)

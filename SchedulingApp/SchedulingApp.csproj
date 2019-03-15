@@ -77,11 +77,23 @@
     <Compile Include="AddCustomerForm.Designer.cs">
       <DependentUpon>AddCustomerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConsultantReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConsultantReportForm.Designer.cs">
+      <DependentUpon>ConsultantReportForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomerMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="CustomerMainForm.Designer.cs">
       <DependentUpon>CustomerMainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CustomerReportForm.Designer.cs">
+      <DependentUpon>CustomerReportForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DataInterface.cs" />
     <Compile Include="EditCustomerForm.cs">
@@ -101,6 +113,12 @@
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MonthReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MonthReportForm.Designer.cs">
+      <DependentUpon>MonthReportForm.cs</DependentUpon>
     </Compile>
     <Compile Include="NewUserForm.cs">
       <SubType>Form</SubType>
@@ -122,8 +140,14 @@
     <EmbeddedResource Include="AddCustomerForm.resx">
       <DependentUpon>AddCustomerForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ConsultantReportForm.resx">
+      <DependentUpon>ConsultantReportForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CustomerMainForm.resx">
       <DependentUpon>CustomerMainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomerReportForm.resx">
+      <DependentUpon>CustomerReportForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EditCustomerForm.resx">
       <DependentUpon>EditCustomerForm.cs</DependentUpon>
@@ -133,6 +157,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MonthReportForm.resx">
+      <DependentUpon>MonthReportForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="NewUserForm.resx">
       <DependentUpon>NewUserForm.cs</DependentUpon>

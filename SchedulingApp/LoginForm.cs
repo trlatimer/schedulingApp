@@ -19,6 +19,7 @@ namespace SchedulingApp
         private static string currentCulture;
         private static string errorMessage = "Username and/or password not found.";
 
+        // Constructor
         public LoginForm()
         {
             InitializeComponent();
@@ -65,10 +66,12 @@ namespace SchedulingApp
             DirectoryInfo dir = new DirectoryInfo(path);
             try
             {
+                // Check if folder exists, if not, create
                 if (!dir.Exists)
                 {
                     dir.Create();
                 }
+                // Append logEntry to file
                 File.AppendAllText(fullPath, logEntry);
             }
             catch (Exception e)
@@ -79,6 +82,7 @@ namespace SchedulingApp
             
         }
 
+        // Login Button CLick
         private void loginLoginButton_Click(object sender, EventArgs e)
         {
             // Obtain login information
@@ -141,19 +145,24 @@ namespace SchedulingApp
             }
         }
 
+        // Create User Click
         private void loginCreateUserButton_Click(object sender, EventArgs e)
         {
+            // Open new NewUserForm, set references, hide this form, show new form
             NewUserForm newUser = new NewUserForm();
             NewUserForm.loginForm = this;
             this.Hide();
             newUser.Show();
         }
 
+        // Exit Button Click
         private void loginExitButton_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
+        // Text Change for Username
+        // Check if empty and set background color appropriately
         private void loginUsernameTextBox_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(loginUsernameTextBox.Text))
@@ -166,6 +175,8 @@ namespace SchedulingApp
             }
         }
 
+        // Text Change for Password
+        // Check if empty and set background color appropriately
         private void loginPasswordTextBox_TextChanged(object sender, EventArgs e)
         {
             if (String.IsNullOrWhiteSpace(loginPasswordTextBox.Text))
@@ -176,11 +187,6 @@ namespace SchedulingApp
             {
                 loginUsernameTextBox.BackColor = Color.White;
             }
-        }
-
-        private void LoginForm_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

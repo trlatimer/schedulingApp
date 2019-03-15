@@ -107,7 +107,6 @@
             this.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.Name = "AddCustomerForm";
             this.Text = "Schedule App | Add Customer";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AddCustomerForm_FormClosing);
             this.Controls.SetChildIndex(this.customerAddress2TextBox, 0);
             this.Controls.SetChildIndex(this.customerIDTextBox, 0);
             this.Controls.SetChildIndex(this.customerNameTextBox, 0);

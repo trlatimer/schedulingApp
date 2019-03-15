@@ -57,7 +57,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(442, 470);
             this.Name = "AddAppointmentForm";
-            this.Text = "AddAppointmentForm";
+            this.Text = "Schedule App | Add Appointment";
             this.ResumeLayout(false);
             this.PerformLayout();
 

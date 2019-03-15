@@ -42,9 +42,9 @@
             this.mainLogoutButton = new System.Windows.Forms.Button();
             this.mainCustomerButton = new System.Windows.Forms.Button();
             this.appointmentsGroupBox = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.monthReportButton = new System.Windows.Forms.Button();
+            this.consultantReportButton = new System.Windows.Forms.Button();
+            this.customerReportButton = new System.Windows.Forms.Button();
             this.reportsGroupBox = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.appointmentsDGV)).BeginInit();
             this.dgvViewGroupBox.SuspendLayout();
@@ -206,38 +206,41 @@
             this.appointmentsGroupBox.TabStop = false;
             this.appointmentsGroupBox.Text = "Appointments";
             // 
-            // button1
+            // monthReportButton
             // 
-            this.button1.Location = new System.Drawing.Point(7, 20);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(81, 23);
-            this.button1.TabIndex = 17;
-            this.button1.Text = "By Month";
-            this.button1.UseVisualStyleBackColor = true;
+            this.monthReportButton.Location = new System.Drawing.Point(7, 20);
+            this.monthReportButton.Name = "monthReportButton";
+            this.monthReportButton.Size = new System.Drawing.Size(81, 23);
+            this.monthReportButton.TabIndex = 17;
+            this.monthReportButton.Text = "By Month";
+            this.monthReportButton.UseVisualStyleBackColor = true;
+            this.monthReportButton.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
+            // consultantReportButton
             // 
-            this.button2.Location = new System.Drawing.Point(7, 49);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(81, 23);
-            this.button2.TabIndex = 18;
-            this.button2.Text = "By Consultant";
-            this.button2.UseVisualStyleBackColor = true;
+            this.consultantReportButton.Location = new System.Drawing.Point(7, 49);
+            this.consultantReportButton.Name = "consultantReportButton";
+            this.consultantReportButton.Size = new System.Drawing.Size(81, 23);
+            this.consultantReportButton.TabIndex = 18;
+            this.consultantReportButton.Text = "By Consultant";
+            this.consultantReportButton.UseVisualStyleBackColor = true;
+            this.consultantReportButton.Click += new System.EventHandler(this.consultantReportButton_Click);
             // 
-            // button3
+            // customerReportButton
             // 
-            this.button3.Location = new System.Drawing.Point(7, 78);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(81, 23);
-            this.button3.TabIndex = 19;
-            this.button3.Text = "By Customer";
-            this.button3.UseVisualStyleBackColor = true;
+            this.customerReportButton.Location = new System.Drawing.Point(7, 78);
+            this.customerReportButton.Name = "customerReportButton";
+            this.customerReportButton.Size = new System.Drawing.Size(81, 23);
+            this.customerReportButton.TabIndex = 19;
+            this.customerReportButton.Text = "By Customer";
+            this.customerReportButton.UseVisualStyleBackColor = true;
+            this.customerReportButton.Click += new System.EventHandler(this.customerReportButton_Click);
             // 
             // reportsGroupBox
             // 
-            this.reportsGroupBox.Controls.Add(this.button3);
-            this.reportsGroupBox.Controls.Add(this.button2);
-            this.reportsGroupBox.Controls.Add(this.button1);
+            this.reportsGroupBox.Controls.Add(this.customerReportButton);
+            this.reportsGroupBox.Controls.Add(this.consultantReportButton);
+            this.reportsGroupBox.Controls.Add(this.monthReportButton);
             this.reportsGroupBox.Location = new System.Drawing.Point(28, 227);
             this.reportsGroupBox.Name = "reportsGroupBox";
             this.reportsGroupBox.Size = new System.Drawing.Size(98, 108);
@@ -250,7 +253,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ClientSize = new System.Drawing.Size(761, 378);
+            this.ClientSize = new System.Drawing.Size(743, 378);
             this.Controls.Add(this.reportsGroupBox);
             this.Controls.Add(this.appointmentsGroupBox);
             this.Controls.Add(this.mainCustomerButton);
@@ -291,9 +294,9 @@
         private System.Windows.Forms.Button mainCustomerButton;
         protected System.Windows.Forms.DataGridView appointmentsDGV;
         private System.Windows.Forms.GroupBox appointmentsGroupBox;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button monthReportButton;
+        private System.Windows.Forms.Button consultantReportButton;
+        private System.Windows.Forms.Button customerReportButton;
         private System.Windows.Forms.GroupBox reportsGroupBox;
     }
 }
